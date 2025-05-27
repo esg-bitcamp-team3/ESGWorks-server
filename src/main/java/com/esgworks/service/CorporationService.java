@@ -1,4 +1,4 @@
-package service;
+package com.esgworks.service;
 
 public class CorporationService {
 }

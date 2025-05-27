@@ -1,4 +1,4 @@
-package repository;
+package com.esgworks.repository;
 
 public class CorporationRepository {
 }
