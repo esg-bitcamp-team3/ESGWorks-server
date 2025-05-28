@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserSignupRequest req) {
         boolean result = userService.signup(req);
