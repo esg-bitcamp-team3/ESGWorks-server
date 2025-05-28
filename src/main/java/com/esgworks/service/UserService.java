@@ -31,5 +31,9 @@ public class UserService {
         userRepository.save(user);
         return true;
     }
+
+    public UserDocument findById(String id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
 
