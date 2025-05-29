@@ -1,12 +1,16 @@
 package com.esgworks.domain;
 
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+@Getter
+@Setter
 @Document(collection = "users")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserDocument {
     @Id
     private String id;
@@ -14,6 +18,6 @@ public class UserDocument {
     private String password;
     private String email;
     private String phoneNumber;
-
-    private String corpId;
+//    private String corpId;
+    private Corporation corporation;
 }
