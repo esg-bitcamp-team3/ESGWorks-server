@@ -18,5 +18,6 @@ public class UserDocument {
     private String password;
     private String email;
     private String phoneNumber;
-    private String corpId;
+//    private String corpId;
+    private Corporation corporation;
 }

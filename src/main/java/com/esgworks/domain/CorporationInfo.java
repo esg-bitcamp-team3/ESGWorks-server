@@ -1,7 +1,5 @@
 package com.esgworks.domain;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.annotation.Id;
 import lombok.*;
 
 @Getter
@@ -9,9 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "corporations")
-public class Corporation {
-    @Id
+public class CorporationInfo {
     private String corpId;
     private String corpName;
     private String ceoName;
