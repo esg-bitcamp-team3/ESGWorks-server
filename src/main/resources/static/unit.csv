@@ -1,0 +1,16 @@
+unit_id,type,unit_name
+u-01,Integer,원
+u-02,Integer,명
+u-03,Double,%
+u-04,Integer,건수
+u-05,Double,톤
+u-06,Double,m³
+u-07,Double,tCO₂eq
+u-08,Double,GJ
+u-09,Double,L
+u-10,Integer,일
+u-11,Integer,개월
+u-12,Integer,시간
+u-13,Boolean,
+u-14,String,
+u-15,String,연도

@@ -1,6 +1,9 @@
 package com.esgworks.domain;
 
 import com.esgworks.dto.CategoryDTO;
+import com.esgworks.dto.CategoryDetailDTO;
+import com.esgworks.dto.SectionDTO;
+import com.esgworks.dto.UnitDTO;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,17 +15,30 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "category")
 public class Category {
     @Id
-    private String sectionId;
-
     private String categoryId;
+
+    private String sectionId;
+    private String unitId;
     private String categoryName;
-    private String unit;
+    private String description;
 
     public CategoryDTO toDTO() {
         return CategoryDTO.builder()
                 .categoryId(categoryId)
+                .sectionId(sectionId)
+                .unitId(unitId)
                 .categoryName(categoryName)
+                .description(description)
+                .build();
+    }
+
+    public CategoryDetailDTO toDetailDTO(SectionDTO section, UnitDTO unit) {
+        return CategoryDetailDTO.builder()
+                .categoryId(categoryId)
+                .section(section)
                 .unit(unit)
+                .categoryName(categoryName)
+                .description(description)
                 .build();
     }
 }
