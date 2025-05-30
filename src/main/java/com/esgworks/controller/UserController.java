@@ -1,14 +1,13 @@
 package com.esgworks.controller;
 
-import com.esgworks.domain.UserDocument;
+import com.esgworks.domain.User;
 import com.esgworks.dto.UserSignupRequest;
 import com.esgworks.dto.LoginRequest;
 import com.esgworks.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api")
@@ -30,8 +29,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest req) {
-        UserDocument user = userService.findById(req.getId());
+    public ResponseEntity<String> login(@RequestBody LoginRequest req) {
+        User user = userService.findById(req.getId());
         if(user==null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
@@ -39,5 +38,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
         return ResponseEntity.ok("로그인 성공");
+    }
+    @GetMapping("/my")
+    public ResponseEntity<?> getMyInfo(Authentication authentication) {
+        User user = userService.findById(authentication.getName());
+        return ResponseEntity.ok(user);
     }
 }
