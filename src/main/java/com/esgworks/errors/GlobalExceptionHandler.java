@@ -36,9 +36,9 @@
 //      .body(new ErrorResponse("VALIDATION_ERROR", ex.getMessage(), ex.getInvalidFields()));
 //  }
 //
-////  @ExceptionHandler(Exception.class)
-////  public ResponseEntity<ErrorResponse> handleAll(Exception ex) {
-////    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-////      .body(new ErrorResponse("INTERNAL_ERROR", "예기치 않은 오류가 발생했습니다."));
-////  }
+//  @ExceptionHandler(Exception.class)
+//  public ResponseEntity<ErrorResponse> handleAll(Exception ex) {
+//    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//      .body(new ErrorResponse("INTERNAL_ERROR", "예기치 않은 오류가 발생했습니다."));
+//  }
 //}

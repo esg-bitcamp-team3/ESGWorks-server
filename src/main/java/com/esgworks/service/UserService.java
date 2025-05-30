@@ -2,6 +2,7 @@ package com.esgworks.service;
 
 import com.esgworks.domain.Corporation;
 import com.esgworks.domain.User;
+import com.esgworks.dto.UserDTO;
 import com.esgworks.dto.UserSignupRequest;
 import com.esgworks.repository.CorporationRepository;
 import com.esgworks.repository.UserRepository;
@@ -53,6 +54,9 @@ public class UserService {
 
     public User findById(String id) {
         return userRepository.findById(id).orElse(null);
+    }
+    public UserDTO findByName(String name) throws Exception {
+        return userRepository.findByName(name).orElseThrow(() -> new Exception("로그인 실패")).toDTO();
     }
 }
 
