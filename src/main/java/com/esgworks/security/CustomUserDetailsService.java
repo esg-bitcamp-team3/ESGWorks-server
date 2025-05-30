@@ -1,6 +1,6 @@
 package com.esgworks.security;
 
-import com.esgworks.domain.UserDocument;
+import com.esgworks.domain.User;
 import com.esgworks.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
@@ -13,9 +13,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        UserDocument user = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + id));
-        // 실제로는 UserDocument → UserDetails로 변환해야 함
+        // 실제로는 User → UserDetails로 변환해야 함
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getId())
                 .password(user.getPassword())

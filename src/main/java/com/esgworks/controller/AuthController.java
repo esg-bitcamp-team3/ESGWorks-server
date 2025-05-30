@@ -1,6 +1,6 @@
 package com.esgworks.controller;
 
-import com.esgworks.domain.UserDocument;
+import com.esgworks.domain.User;
 import com.esgworks.dto.LoginRequest;
 import com.esgworks.security.JwtTokenProvider;
 import com.esgworks.service.UserService;
@@ -23,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
-        UserDocument user = userService.findById(req.getId());
+        User user = userService.findById(req.getId());
         if (user == null || !passwordEncoder.matches(req.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
