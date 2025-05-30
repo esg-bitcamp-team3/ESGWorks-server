@@ -3,21 +3,20 @@ package com.esgworks.service;
 import com.esgworks.domain.UserDocument;
 import com.esgworks.dto.UserSignupRequest;
 import com.esgworks.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UserService {
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public boolean signup(UserSignupRequest req) {
-
-
         if (userRepository.existsById(req.getId())) {
             return false; // 중복 이메일
         }
