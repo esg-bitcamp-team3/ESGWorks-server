@@ -1,12 +1,11 @@
 package com.esgworks.service;
 
 import com.esgworks.domain.Corporation;
-import com.esgworks.domain.UserDocument;
+import com.esgworks.domain.User;
 import com.esgworks.dto.UserSignupRequest;
 import com.esgworks.repository.CorporationRepository;
 import com.esgworks.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.esgworks.domain.CorporationInfo;
@@ -41,7 +40,7 @@ public class UserService {
                 .establishedDate(corp.getEstablishedDate())
                 .build();
 
-        UserDocument user = new UserDocument();
+        User user = new User();
         user.setId(req.getId());
         user.setEmail(req.getEmail());
         user.setPassword(passwordEncoder.encode(req.getPassword())); // 비밀번호 암호화!
@@ -52,7 +51,7 @@ public class UserService {
         return true;
     }
 
-    public UserDocument findById(String id) {
+    public User findById(String id) {
         return userRepository.findById(id).orElse(null);
     }
 }
