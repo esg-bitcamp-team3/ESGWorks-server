@@ -47,7 +47,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(req.getPassword())); // 비밀번호 암호화!
         user.setName(req.getName());
         user.setPhoneNumber(req.getPhoneNumber());
-//        user.setCorpId(req.getCorpId());
+        user.setCorpId(req.getCorpId());
         userRepository.save(user);
         return true;
     }
