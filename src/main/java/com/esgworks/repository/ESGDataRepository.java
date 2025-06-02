@@ -15,4 +15,5 @@ public interface ESGDataRepository extends MongoRepository<ESGData, String> {
 
     // 기업 ID와 연도를 기준으로 ESG 데이터 조회
     Optional<ESGData> findByCorpIdAndYear(String corpId, String year);
+    Optional<ESGData> findByCorpIdAndYearAndCategoryId(String corpId, String year, String categoryId);
 }

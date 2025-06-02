@@ -54,4 +54,11 @@ public class ESGDataController {
         esgDataService.deleteESGData(corpId, year);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/year/{year}/category/{categoryId}")
+    public ResponseEntity<ESGDataDTO> getESGDataByYearAndCategoryId(@PathVariable String year,
+                                                                          @PathVariable String categoryId) {
+        ESGDataDTO esgDataList = esgDataService.getByCorpIdAndYearAndCategoryIdList(year, categoryId);
+        return ResponseEntity.ok(esgDataList);
+    }
 }

@@ -1,11 +1,15 @@
 package com.esgworks.service;
 
 import com.esgworks.domain.ESGData;
+import com.esgworks.domain.User;
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.UserDTO;
 import com.esgworks.exceptions.DuplicateException;
 import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.ESGDataRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.Optional;
 public class ESGDataService {
 
     private final ESGDataRepository esgDataRepository;
+    private final UserService userService;
 
     // 전체 ESG 데이터 조회
     public List<ESGDataDTO> getAllESGData() {
@@ -81,5 +86,16 @@ public class ESGDataService {
         ESGData data = esgDataRepository.findByCorpIdAndYear(corpId, year)
                 .orElseThrow(() -> new NotFoundException("해당 ESG 데이터가 존재하지 않습니다."));
         esgDataRepository.delete(data);
+    }
+
+
+    public ESGDataDTO getByCorpIdAndYearAndCategoryIdList(String year , String categoryId)  {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDTO user = userService.findById2(authentication.getName());
+        return esgDataRepository
+          .findByCorpIdAndYearAndCategoryId(user.getCorpId(), year, categoryId)
+          .orElseThrow(() -> new NotFoundException("찾지 못했어요")).toDTO();
+
+
     }
 }

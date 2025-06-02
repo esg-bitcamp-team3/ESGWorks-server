@@ -50,7 +50,7 @@ public class UserController {
     public ResponseEntity<UserDTO> getProfile() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        UserDTO user = userService.findByName(username);
+        UserDTO user = userService.findById2(username);
         return ResponseEntity.ok(user);
     }
 }
