@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class EsgDataLoader {
             InputStream is = new ClassPathResource("static/esgdata.xlsx").getInputStream();
             Workbook workbook = WorkbookFactory.create(is);
             Sheet sheet = workbook.getSheetAt(0);
-
             List<ESGData> esgDataList = new ArrayList<>();
 
             for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
@@ -38,7 +38,7 @@ public class EsgDataLoader {
                 for (int colIndex = 2; colIndex <= 6; colIndex++) {
                     String year = String.valueOf(2018 + colIndex); // 2~6 -> 2020~2024
                     String value = getStringValue(row.getCell(colIndex));
-
+                    String now = LocalDate.now().toString();
                     if (value == null || value.equalsIgnoreCase("비고") || value.isEmpty()) continue;
 
                     ESGData esgData = ESGData.builder()
@@ -46,10 +46,10 @@ public class EsgDataLoader {
                             .corpId(corpId)
                             .year(year)
                             .value(value.replace(",", ""))
-                            .createdAt(LocalDate.now())
-                            .createdBy(LocalDate.now())
-                            .updatedAt(LocalDate.now())
-                            .updatedBy(LocalDate.now())
+                            .createdAt(LocalDateTime.now())
+                            .createdBy("")
+                            .updatedAt(LocalDateTime.now())
+                            .updatedBy("")
                             .build();
 
                     esgDataList.add(esgData);
