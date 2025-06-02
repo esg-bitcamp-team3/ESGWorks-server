@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -15,17 +16,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Document(collection = "esgData")
 public class ESGData {
+    private String esgDataId;
     private String categoryId;
     private String corpId;
     private String year;
     private String value;
-    private LocalDate updatedAt;
-    private LocalDate updatedBy;
-    private LocalDate createdAt;
-    private LocalDate createdBy;
+    private LocalDateTime updatedAt;
+    private String updatedBy;
+    private LocalDateTime createdAt;
+    private String createdBy;
 
     public ESGDataDTO toDTO() {
         return ESGDataDTO.builder()
+                .esgDataId(esgDataId)
                 .categoryId(categoryId)
                 .corpId(corpId)
                 .year(year)

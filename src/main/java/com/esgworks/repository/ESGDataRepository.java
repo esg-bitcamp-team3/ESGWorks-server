@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ESGDataRepository extends MongoRepository<ESGData, String> {
 
+    Optional<ESGData> findById(String esgDataId);
     // 특정 기업의 ESG 데이터를 조회
     List<ESGData> findByCorpId(String corpId);
 
