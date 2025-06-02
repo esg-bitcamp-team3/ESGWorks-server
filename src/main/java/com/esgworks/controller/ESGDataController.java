@@ -1,9 +1,13 @@
 package com.esgworks.controller;
 
+import com.esgworks.dto.CategorizedESGDataListDTO;
 import com.esgworks.dto.ESGDataDTO;
 import com.esgworks.service.ESGDataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +23,16 @@ public class ESGDataController {
     @GetMapping
     public ResponseEntity<List<ESGDataDTO>> getAllESGData() {
         return ResponseEntity.ok(esgDataService.getAllESGData());
+    }
+
+    // 카테고리 ID로 ESG 데이터 조회
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<CategorizedESGDataListDTO> getESGDataById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String categoryId) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String userId = userDetails.getUsername();
+        return ResponseEntity.ok(esgDataService.getESGDataByCategoryId(categoryId, userId));
     }
 
     // 기업 ID로 ESG 데이터 조회

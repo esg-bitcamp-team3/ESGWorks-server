@@ -1,8 +1,12 @@
 package com.esgworks.service;
 
 import com.esgworks.domain.ESGData;
+import com.esgworks.dto.CategorizedESGDataListDTO;
+import com.esgworks.dto.CategoryDetailDTO;
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.ESGNumberDTO;
 import com.esgworks.exceptions.DuplicateException;
+import com.esgworks.exceptions.InvalidRequestException;
 import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.ESGDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,16 +14,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ESGDataService {
 
     private final ESGDataRepository esgDataRepository;
+    private final CategoryService categoryService;
+    private final UserService userService;
 
     // 전체 ESG 데이터 조회
     public List<ESGDataDTO> getAllESGData() {
         return esgDataRepository.findAll().stream().map(ESGData::toDTO).toList();
+    }
+
+    // 카테고리 ID로 조회
+    public List<ESGDataDTO> getByCategoryId(String categoryId) {
+        return esgDataRepository.findByCategoryId(categoryId).stream().map(ESGData::toDTO).toList();
     }
 
     // 기업 ID로 조회
@@ -81,5 +93,42 @@ public class ESGDataService {
         ESGData data = esgDataRepository.findByCorpIdAndYear(corpId, year)
                 .orElseThrow(() -> new NotFoundException("해당 ESG 데이터가 존재하지 않습니다."));
         esgDataRepository.delete(data);
+    }
+
+    public CategorizedESGDataListDTO getESGDataByCategoryId(String categoryId, String userId) {
+        CategoryDetailDTO categoryDetailDTO = categoryService.getCategoryById(categoryId);
+        if (categoryDetailDTO.getUnit().getType().equals("String")) {
+            throw new IllegalArgumentException("적절하지 않음");
+        }
+        String corpId = userService.findById(userId).getCorpId();
+
+        List<ESGData> esgDataList = esgDataRepository.findByCategoryIdAndCorpId(categoryId, corpId);
+
+        List<ESGNumberDTO> esgNumberDTOList = esgDataList.stream()
+                .map(esg -> {
+                    String rawValue = esg.getValue();
+                    double parsedValue;
+
+                    try {
+                        parsedValue = Double.parseDouble(rawValue);
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("value가 숫자가 아닙니다: " + rawValue);
+                    }
+
+                    return ESGNumberDTO.builder()
+                            .categoryId(categoryId)
+                            .corpId(corpId)
+                            .year(esg.getYear())
+                            .value(parsedValue)
+                            .build();
+                })
+                .toList();
+
+
+        CategorizedESGDataListDTO result = CategorizedESGDataListDTO.builder()
+                .categoryDetailDTO(categoryDetailDTO)
+                .esgNumberDTOList(esgNumberDTOList)
+                .build();
+        return result;
     }
 }
