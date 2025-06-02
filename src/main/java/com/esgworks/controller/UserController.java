@@ -4,6 +4,8 @@ import com.esgworks.domain.User;
 import com.esgworks.dto.UserSignupRequest;
 import com.esgworks.dto.LoginRequest;
 import com.esgworks.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +30,25 @@ public class UserController {
         return ResponseEntity.ok("회원가입 성공");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest req) {
-        User user = userService.findById(req.getId());
-        if(user==null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 올바르지 않습니다.");
-        }
-        if(!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 올바르지 않습니다.");
-        }
-        return ResponseEntity.ok("로그인 성공");
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody LoginRequest req) {
+//        User user = userService.findById(req.getId());
+//        if(user==null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 올바르지 않습니다.");
+//        }
+//        if(!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 올바르지 않습니다.");
+//        }
+//        return ResponseEntity.ok("로그인 성공");
+//    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        // 실제로 서버 측에서 처리할 내용 없음 (Stateless)
+        return ResponseEntity.ok("로그아웃 성공 (클라이언트에서 토큰 삭제 필요)");
     }
+
+
     @GetMapping("/my")
     public ResponseEntity<?> getMyInfo(Authentication authentication) {
         User user = userService.findById(authentication.getName());
