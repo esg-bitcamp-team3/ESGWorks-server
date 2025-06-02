@@ -17,6 +17,10 @@ public class ESGDataService {
 
     private final ESGDataRepository esgDataRepository;
 
+    public Optional<ESGData> getESGDataById(String esgDataId) {
+        return esgDataRepository.findById(esgDataId);
+    }
+
     // 전체 ESG 데이터 조회
     public List<ESGDataDTO> getAllESGData() {
         return esgDataRepository.findAll().stream().map(ESGData::toDTO).toList();
@@ -33,7 +37,7 @@ public class ESGDataService {
     }
 
     // ESG 데이터 생성
-    public ESGDataDTO createESGData(ESGDataDTO dto) {
+    public ESGDataDTO createESGData(ESGDataDTO dto, String userId) {
         if (dto.getCategoryId() == null || dto.getCorpId() == null || dto.getYear() == null) {
             throw new IllegalArgumentException("CategoryId, CorpId, Year는 필수 값입니다.");
         }
@@ -49,16 +53,16 @@ public class ESGDataService {
                 .year(dto.getYear())
                 .value(dto.getValue())
                 .createdAt(dto.getCreatedAt())
-                .createdBy(dto.getCreatedBy())
+                .createdBy(userId)
                 .updatedAt(dto.getUpdatedAt())
-                .updatedBy(dto.getUpdatedBy())
+                .updatedBy(userId)
                 .build();
+
         esgDataRepository.save(esgData);
-        return dto;
+        return esgData.toDTO(); // 수정: 저장된 결과 반환
     }
 
-    // ESG 데이터 수정
-    public ESGDataDTO updateESGData(String corpId, String year, ESGDataDTO dto) {
+    public ESGDataDTO updateESGData(String corpId, String year, ESGDataDTO dto, String userId) {
         ESGData existing = esgDataRepository.findByCorpIdAndYear(corpId, year)
                 .orElseThrow(() -> new NotFoundException("해당 ESG 데이터가 존재하지 않습니다."));
 
@@ -70,7 +74,7 @@ public class ESGDataService {
                 .createdAt(existing.getCreatedAt())
                 .createdBy(existing.getCreatedBy())
                 .updatedAt(dto.getUpdatedAt())
-                .updatedBy(dto.getUpdatedBy())
+                .updatedBy(userId)
                 .build();
 
         return esgDataRepository.save(updated).toDTO();
