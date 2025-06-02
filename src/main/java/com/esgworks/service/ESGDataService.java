@@ -28,10 +28,8 @@ public class ESGDataService {
     }
 
     // 기업 ID + 연도로 단일 조회
-    public ESGDataDTO getByCorpIdAndYear(String corpId, String year) {
-        ESGData data = esgDataRepository.findByCorpIdAndYear(corpId, year)
-                .orElseThrow(() -> new NotFoundException("해당 기업의 연도별 ESG 데이터가 존재하지 않습니다."));
-        return data.toDTO();
+    public List<ESGDataDTO> getByCorpIdAndYear(String corpId, String year) {
+        return esgDataRepository.findAllByCorpIdAndYear(corpId, year).stream().map(ESGData::toDTO).toList();
     }
 
     // ESG 데이터 생성
@@ -49,6 +47,7 @@ public class ESGDataService {
                 .categoryId(dto.getCategoryId())
                 .corpId(dto.getCorpId())
                 .year(dto.getYear())
+                .value(dto.getValue())
                 .createdAt(dto.getCreatedAt())
                 .createdBy(dto.getCreatedBy())
                 .updatedAt(dto.getUpdatedAt())
@@ -67,6 +66,7 @@ public class ESGDataService {
                 .categoryId(dto.getCategoryId())
                 .corpId(corpId)
                 .year(year)
+                .value(dto.getValue())
                 .createdAt(existing.getCreatedAt())
                 .createdBy(existing.getCreatedBy())
                 .updatedAt(dto.getUpdatedAt())

@@ -29,7 +29,7 @@ public class ESGDataController {
 
     // 기업 ID + 연도로 단일 ESG 데이터 조회
     @GetMapping("/corp/{corpId}/year/{year}")
-    public ResponseEntity<ESGDataDTO> getESGDataByCorpIdAndYear(@PathVariable String corpId, @PathVariable String year) {
+    public ResponseEntity<List<ESGDataDTO>> getESGDataByCorpIdAndYear(@PathVariable String corpId, @PathVariable String year) {
         return ResponseEntity.ok(esgDataService.getByCorpIdAndYear(corpId, year));
     }
 

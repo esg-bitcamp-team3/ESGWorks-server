@@ -18,6 +18,7 @@ public class ESGData {
     private String categoryId;
     private String corpId;
     private String year;
+    private String value;
     private LocalDate updatedAt;
     private LocalDate updatedBy;
     private LocalDate createdAt;
@@ -28,6 +29,7 @@ public class ESGData {
                 .categoryId(categoryId)
                 .corpId(corpId)
                 .year(year)
+                .value(value)
                 .updatedAt(updatedAt)
                 .updatedBy(updatedBy)
                 .createdAt(createdAt)

@@ -16,6 +16,7 @@ public class ESGDataDTO {
     private String categoryId;
     private String corpId;
     private String year;
+    private String value;
     private LocalDate updatedAt;
     private LocalDate updatedBy;
     private LocalDate createdAt;
