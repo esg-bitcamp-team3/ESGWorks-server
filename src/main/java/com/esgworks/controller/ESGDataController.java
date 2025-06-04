@@ -3,8 +3,10 @@ package com.esgworks.controller;
 import com.esgworks.domain.ESGData;
 import com.esgworks.dto.CategorizedESGDataListDTO;
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.dataDTO.ESGDataFilterDTO;
 import com.esgworks.service.ESGDataService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/esg-data")
 @RequiredArgsConstructor
+@Slf4j
 public class ESGDataController {
 
     private final ESGDataService esgDataService;
@@ -87,10 +90,20 @@ public class ESGDataController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/year/{year}/category/{categoryId}")
-    public ResponseEntity<ESGDataDTO> getESGDataByYearAndCategoryId(@PathVariable String year,
-                                                                          @PathVariable String categoryId) {
-        ESGDataDTO esgDataList = esgDataService.getByCorpIdAndYearAndCategoryIdList(year, categoryId);
-        return ResponseEntity.ok(esgDataList);
+    @GetMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> getESGDataByYearAndCategoryId(@RequestParam("categoryId") String categoryId,
+                                                                    @RequestParam("year") String year) {
+        ESGDataDTO esgData = esgDataService.getByCorpIdAndYearAndCategoryId(year, categoryId);
+        return ResponseEntity.ok(esgData);
+    }
+
+    @PatchMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> patchESGData(@RequestBody ESGDataFilterDTO dto) {
+        log.info(dto.toString());
+        return ResponseEntity.ok(esgDataService.patchESGData(dto));
+    }
+    @PostMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> createESGData2(@RequestBody ESGDataFilterDTO dto) {
+        return ResponseEntity.ok(esgDataService.createESGData2(dto));
     }
 }
