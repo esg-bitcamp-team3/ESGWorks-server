@@ -41,4 +41,9 @@ public class ESGData {
                 .createdBy(createdBy)
                 .build();
     }
+    public void updateValue(String value, String updatedBy) {
+        this.value = value;
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = updatedBy;
+    }
 }

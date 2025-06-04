@@ -3,6 +3,7 @@ package com.esgworks.controller;
 import com.esgworks.domain.ESGData;
 import com.esgworks.dto.CategorizedESGDataListDTO;
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.dataDTO.ESGDataFilterDTO;
 import com.esgworks.service.ESGDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,5 +89,22 @@ public ResponseEntity<ESGDataDTO> getESGDataById(@PathVariable String esgDataId)
                                               @PathVariable String year) {
         esgDataService.deleteESGData(corpId, year);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> getESGDataByYearAndCategoryId(@RequestParam("categoryId") String categoryId,
+                                                                    @RequestParam("year") String year) {
+        ESGDataDTO esgData = esgDataService.getByCorpIdAndYearAndCategoryId(year, categoryId);
+        return ResponseEntity.ok(esgData);
+    }
+
+    @PatchMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> patchESGData(@RequestBody ESGDataFilterDTO dto) {
+        log.info(dto.toString());
+        return ResponseEntity.ok(esgDataService.patchESGData(dto));
+    }
+    @PostMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> createESGData2(@RequestBody ESGDataFilterDTO dto) {
+        return ResponseEntity.ok(esgDataService.createESGData2(dto));
     }
 }

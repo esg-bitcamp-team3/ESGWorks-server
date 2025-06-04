@@ -29,4 +29,8 @@ public class SectionService {
         Section section = sectionRepository.findBySectionId(sectionId).orElseThrow(()->new NotFoundException("없는 섹션입니다."));
         return section.toDTO();
     }
+
+    public List<SectionDTO> getSectionIdStartsWith(String sectionId) {
+        return sectionRepository.findBySectionIdStartsWith(sectionId.substring(0,1)).stream().map(Section::toDTO).toList();
+    }
 }

@@ -1,6 +1,7 @@
 package com.esgworks.domain;
 
 
+import com.esgworks.dto.UserDTO;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,4 +20,14 @@ public class User {
     private String email;
     private String phoneNumber;
     private String corpId;
+
+    public UserDTO toDTO() {
+        return UserDTO.builder()
+          .id(id)
+          .name(name)
+          .email(email)
+          .phoneNumber(phoneNumber)
+          .corpId(corpId)
+          .build();
+    }
 }

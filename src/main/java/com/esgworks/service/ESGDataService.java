@@ -2,17 +2,26 @@ package com.esgworks.service;
 
 import com.esgworks.domain.Criterion;
 import com.esgworks.domain.ESGData;
+import com.esgworks.domain.User;
 import com.esgworks.dto.CategorizedESGDataListDTO;
 import com.esgworks.dto.CategoryDetailDTO;
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.UserDTO;
 import com.esgworks.dto.ESGNumberDTO;
+import com.esgworks.dto.dataDTO.ESGDataFilterDTO;
 import com.esgworks.exceptions.DuplicateException;
 import com.esgworks.exceptions.InvalidRequestException;
 import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.ESGDataRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,11 +29,12 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ESGDataService {
 
     private final ESGDataRepository esgDataRepository;
-    private final CategoryService categoryService;
     private final UserService userService;
+    private final CategoryService categoryService;
 
     public ESGDataDTO getESGDataById(String esgDataId) {
         ESGData esgData = esgDataRepository.findByEsgDataId(esgDataId).orElseThrow(() -> new RuntimeException("없는 ESG데이터입니다."));
@@ -137,5 +147,54 @@ public class ESGDataService {
                 .esgNumberDTOList(esgNumberDTOList)
                 .build();
         return result;
+    }
+
+
+    public ESGDataDTO getByCorpIdAndYearAndCategoryId(String year , String categoryId)  {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDTO user = userService.findById2(authentication.getName());
+        Optional<ESGData> data = esgDataRepository
+          .findByCorpIdAndYearAndCategoryId(user.getCorpId(), year, categoryId);
+      return data.map(ESGData::toDTO).orElse(null);
+    }
+
+    @Transactional
+    public ESGDataDTO patchESGData(ESGDataFilterDTO dto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userId = userDetails.getUsername();
+
+        ESGData existing = esgDataRepository
+          .findByCorpIdAndYearAndCategoryId(dto.getCorpId(), dto.getYear(), dto.getCategoryId())
+          .orElseThrow(() -> new NotFoundException("해당 ESG 데이터가 존재하지 않습니다."));
+
+        existing.updateValue(dto.getValue(), userId);
+
+        return esgDataRepository.save(existing).toDTO();
+    }
+
+    @Transactional
+    public ESGDataDTO createESGData2(ESGDataFilterDTO dto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userId = userDetails.getUsername();
+
+        Optional<ESGData> existing = esgDataRepository
+          .findByCorpIdAndYearAndCategoryId(dto.getCorpId(), dto.getYear(), dto.getCategoryId());
+        log.info(dto.toString());
+        if (existing.isPresent()){
+            throw new DuplicateException("해당 ESG 데이터가 이미 존재합니다.");
+        }
+
+        ESGData esgData = ESGData.builder()
+          .categoryId(dto.getCategoryId())
+          .corpId(dto.getCorpId())
+          .year(dto.getYear())
+          .value(dto.getValue())
+          .createdAt(LocalDateTime.now())
+          .createdBy(userId)
+          .updatedAt(LocalDateTime.now())
+          .updatedBy(userId)
+          .build();
+        esgDataRepository.save(esgData);
+        return esgData.toDTO(); // 수정: 저장된 결과 반환
     }
 }
