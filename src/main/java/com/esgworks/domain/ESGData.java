@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Document(collection = "esgData")
 public class ESGData {
+    @Id
     private String esgDataId;
+
     private String categoryId;
     private String corpId;
     private String year;
