@@ -31,9 +31,7 @@ public class DataSetService {
         List<DataSet> dataSets = dataSetRepository.findAllByChartId(chartId);
         return dataSets.stream().map(dataSet -> {
             List<ESGDataDTO> esgDataDTOList = dataSet.getEsgDataIdList().stream()
-                    .map(id -> esgDataService.getESGDataById(id)
-                            .orElseThrow(() -> new NotFoundException("ESG 데이터가 존재하지 않습니다: " + id)))
-                    .map(ESGData::toDTO)
+                    .map(id -> esgDataService.getESGDataById(id))
                     .toList();
 
             return dataSet.toDetailDTO(esgDataDTOList);
