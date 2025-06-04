@@ -1,10 +1,13 @@
 package com.esgworks.service;
 
 import com.esgworks.domain.Report;
+import com.esgworks.dto.CorporationDTO;
+import com.esgworks.dto.ReportDTO;
 import com.esgworks.dto.ReportRequest;
 import com.esgworks.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.esgworks.service.CorporationService;
 
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReportService {
     private final ReportRepository reportRepository;
+    private final CorporationService corporationService;
 
     public Report createReport(ReportRequest dto) {
         Report report = Report.builder()
@@ -23,8 +27,21 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
-    public List<Report> getReports() {
-        return reportRepository.findAll();
+    public ReportDTO createReportAndReturnDTO(ReportRequest dto) {
+        Report report = createReport(dto);
+        CorporationDTO corp = corporationService.getCorporationById(report.getCorpId());
+        return ReportDTO.fromEntity(report, corp);
+    }
+
+
+    public List<ReportDTO> getReports() {
+        List<Report> reports = reportRepository.findAll();
+        return reports.stream()
+                .map(report -> {
+                    CorporationDTO corpDto =  corporationService.getCorporationById(report.getCorpId());
+                    return ReportDTO.fromEntity(report, corpDto);
+                })
+                .toList();
     }
 
     public Report getReportById(String id) {
@@ -42,4 +59,17 @@ public class ReportService {
         report.setContent(dto.getContent());
         return reportRepository.save(report);
     }
+
+    public ReportDTO updateReportAndReturnDTO(String id, ReportRequest dto) {
+        Report updated = updateReportById(id, dto);
+        CorporationDTO corp = corporationService.getCorporationById(updated.getCorpId());
+        return ReportDTO.fromEntity(updated, corp);
+    }
+
+    public ReportDTO getReportDTOById(String id) {
+        Report report = getReportById(id);
+        CorporationDTO corp = corporationService.getCorporationById(report.getCorpId());
+        return ReportDTO.fromEntity(report, corp);
+    }
+
 }
