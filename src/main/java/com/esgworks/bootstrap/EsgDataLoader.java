@@ -1,23 +1,23 @@
-package com.esgworks.bootstrap;
-
-import com.esgworks.domain.ESGData;
-import com.esgworks.repository.ESGDataRepository;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.*;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
-
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-@Component
-@RequiredArgsConstructor
-public class EsgDataLoader {
-
+//package com.esgworks.bootstrap;
+//
+//import com.esgworks.domain.ESGData;
+//import com.esgworks.repository.ESGDataRepository;
+//import jakarta.annotation.PostConstruct;
+//import lombok.RequiredArgsConstructor;
+//import org.apache.poi.ss.usermodel.*;
+//import org.springframework.core.io.ClassPathResource;
+//import org.springframework.stereotype.Component;
+//
+//import java.io.InputStream;
+//import java.time.LocalDate;
+//import java.time.LocalDateTime;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//@Component
+//@RequiredArgsConstructor
+//public class EsgDataLoader {
+//
 //    private final ESGDataRepository esgDataRepository;
 //
 //    @PostConstruct
@@ -75,4 +75,4 @@ public class EsgDataLoader {
 //            default -> null;
 //        };
 //    }
-}
+//}

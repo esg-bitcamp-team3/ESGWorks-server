@@ -1,5 +1,6 @@
 package com.esgworks.service;
 
+import com.esgworks.domain.Criterion;
 import com.esgworks.domain.ESGData;
 import com.esgworks.domain.User;
 import com.esgworks.dto.CategorizedESGDataListDTO;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +36,9 @@ public class ESGDataService {
     private final UserService userService;
     private final CategoryService categoryService;
 
-    public Optional<ESGData> getESGDataById(String esgDataId) {
-        return esgDataRepository.findById(esgDataId);
+    public ESGDataDTO getESGDataById(String esgDataId) {
+        ESGData esgData = esgDataRepository.findByEsgDataId(esgDataId).orElseThrow(() -> new RuntimeException("없는 ESG데이터입니다."));
+        return esgData.toDTO();
     }
 
     // 전체 ESG 데이터 조회
@@ -44,17 +47,17 @@ public class ESGDataService {
     }
 
     // 카테고리 ID로 조회
-    public List<ESGDataDTO> getByCategoryId(String categoryId) {
+    public List<ESGDataDTO> getESGDataByCategoryId(String categoryId) {
         return esgDataRepository.findByCategoryId(categoryId).stream().map(ESGData::toDTO).toList();
     }
 
     // 기업 ID로 조회
-    public List<ESGDataDTO> getByCorpId(String corpId) {
+    public List<ESGDataDTO> getESGDataByCorpId(String corpId) {
         return esgDataRepository.findByCorpId(corpId).stream().map(ESGData::toDTO).toList();
     }
 
     // 기업 ID + 연도로 단일 조회
-    public List<ESGDataDTO> getByCorpIdAndYear(String corpId, String year) {
+    public List<ESGDataDTO> getESGDataByCorpIdAndYear(String corpId, String year) {
         return esgDataRepository.findAllByCorpIdAndYear(corpId, year).stream().map(ESGData::toDTO).toList();
     }
 

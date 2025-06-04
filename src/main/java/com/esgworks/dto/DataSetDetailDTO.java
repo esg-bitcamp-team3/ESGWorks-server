@@ -22,5 +22,4 @@ public class DataSetDetailDTO {
     private String borderColor;
     private String borderWidth;
     private String fill;
-
 }

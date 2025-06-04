@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class ESGData {
     @Id
     private String esgDataId;
+
     private String categoryId;
     private String corpId;
     private String year;
