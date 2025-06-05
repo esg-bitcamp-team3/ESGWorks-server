@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface SectionRepository extends MongoRepository<Section, String> {
     List<Section> findByCriterionId(String criterionId);
     Optional<Section> findBySectionId(String sectionId);
+    List<Section> findBySectionIdStartsWith(String sectionId);
 }
