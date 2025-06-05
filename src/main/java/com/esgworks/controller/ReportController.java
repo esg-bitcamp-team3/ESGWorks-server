@@ -1,9 +1,11 @@
 package com.esgworks.controller;
 
 import com.esgworks.domain.Report;
+import com.esgworks.dto.CorporationDTO;
 import com.esgworks.dto.ReportDTO;
 import com.esgworks.dto.ReportRequest;
 import com.esgworks.repository.ReportRepository;
+import com.esgworks.service.CorporationService;
 import com.esgworks.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import java.util.List;
 @Slf4j
 public class ReportController {
     private final ReportService reportService;
+    private final CorporationService corporationService;
 
     @PostMapping
     public ResponseEntity<ReportDTO> createReport(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReportRequest dto) {
@@ -27,7 +30,7 @@ public class ReportController {
             return ResponseEntity.status(401).build();
         }
         dto.setUserId(userDetails.getUsername());
-        ReportDTO savedReport = reportService.createReportAndReturnDTO(dto);
+        ReportDTO savedReport = reportService.createReportAndReturnDTO(dto, userDetails.getUsername());
         return ResponseEntity.ok(savedReport);
     }
 
@@ -42,8 +45,10 @@ public class ReportController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReportDTO> update(@PathVariable String id, @RequestBody ReportRequest dto) {
-        return ResponseEntity.ok(reportService.updateReportAndReturnDTO(id, dto));
+    public ResponseEntity<ReportDTO> update(@PathVariable String id, @AuthenticationPrincipal UserDetails userDetails ,@RequestBody ReportRequest dto) {
+        Report updated = reportService.updateReportById(id, dto, userDetails.getUsername());
+        CorporationDTO corp = corporationService.getCorporationById(updated.getCorpId());
+        return ResponseEntity.ok(reportService.updateReportAndReturnDTO(id, dto, userDetails.getUsername()));
     }
 
     @DeleteMapping("/{id}")

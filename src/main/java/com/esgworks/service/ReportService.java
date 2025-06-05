@@ -7,8 +7,8 @@ import com.esgworks.dto.ReportRequest;
 import com.esgworks.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.esgworks.service.CorporationService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -17,18 +17,22 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final CorporationService corporationService;
 
-    public Report createReport(ReportRequest dto) {
+    public Report createReport(ReportRequest dto,String userId) {
         Report report = Report.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .userId(dto.getUserId())
                 .corpId(dto.getCorpId())
+                .createdBy(userId)
+                .createdAt(LocalDateTime.now())
+                .updatedBy(userId)
+                .updatedAt(LocalDateTime.now())
                 .build();
         return reportRepository.save(report);
     }
 
-    public ReportDTO createReportAndReturnDTO(ReportRequest dto) {
-        Report report = createReport(dto);
+    public ReportDTO createReportAndReturnDTO(ReportRequest dto, String userId) {
+        Report report = createReport(dto, userId);
         CorporationDTO corp = corporationService.getCorporationById(report.getCorpId());
         return ReportDTO.fromEntity(report, corp);
     }
@@ -53,15 +57,17 @@ public class ReportService {
         reportRepository.deleteById(id);
     }
 
-    public Report updateReportById(String id, ReportRequest dto) {
+    public Report updateReportById(String id, ReportRequest dto, String userId) {
         Report report = getReportById(id);
         report.setTitle(dto.getTitle());
         report.setContent(dto.getContent());
+        report.setUpdatedAt(LocalDateTime.now());
+        report.setUpdatedBy(userId);
         return reportRepository.save(report);
     }
 
-    public ReportDTO updateReportAndReturnDTO(String id, ReportRequest dto) {
-        Report updated = updateReportById(id, dto);
+    public ReportDTO updateReportAndReturnDTO(String id, ReportRequest dto, String userId) {
+        Report updated = updateReportById(id, dto, userId);
         CorporationDTO corp = corporationService.getCorporationById(updated.getCorpId());
         return ReportDTO.fromEntity(updated, corp);
     }
