@@ -38,6 +38,18 @@ public class DataSetService {
         }).toList();
     }
 
+    // TYPE별 DateSet 조회
+    public List<DataSetDetailDTO> getDetailedDataSetsByChartIdAndType(String chartId, String type) {
+        List<DataSet> dataSets = dataSetRepository.findAllByChartIdAndType(chartId, type);
+        return dataSets.stream().map(dataSet -> {
+            List<ESGDataDTO> esgDataDTOList = dataSet.getEsgDataIdList().stream()
+                    .map(id -> esgDataService.getESGDataById(id))
+                    .toList();
+
+            return dataSet.toDetailDTO(esgDataDTOList);
+        }).toList();
+    }
+
     public List<DataSetDTO> getDataSetsByChartId(String chartId) {
         return dataSetRepository.findAllByChartId(chartId).stream()
                 .map(DataSet::toDTO)

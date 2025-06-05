@@ -11,7 +11,9 @@ import java.util.Optional;
 @Repository
 public interface InterestChartRepository extends MongoRepository<InterestChart, String> {
 
-    Optional<InterestChart> findById(String interestChartId);
+    Optional<InterestChart> findByInterestChartId(String interestChartId);
+
+    Optional<InterestChart> findByChartId(String chartId);
     // 특정 기업의 ESG 데이터를 조회
     List<InterestChart> findByUserId(String userId);
 
