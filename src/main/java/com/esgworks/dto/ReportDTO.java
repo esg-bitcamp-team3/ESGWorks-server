@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -15,6 +17,11 @@ public class ReportDTO {
     private String userId;
     private CorporationDTO corp;
 
+    private String createdBy;
+    private String updatedBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     public static ReportDTO fromEntity(Report report, CorporationDTO corpDto) {
         return ReportDTO.builder()
                 .id(report.getId())
@@ -22,6 +29,10 @@ public class ReportDTO {
                 .content(report.getContent())
                 .userId(report.getUserId())
                 .corp(corpDto)
+                .createdBy(report.getCreatedBy())
+                .updatedBy(report.getUpdatedBy())
+                .createdAt(report.getCreatedAt())
+                .updatedAt(report.getUpdatedAt())
                 .build();
     }
 }
