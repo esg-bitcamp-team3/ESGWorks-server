@@ -20,6 +20,4 @@ public class InterestReports {
   private String reportId;
   private String userId;
   private LocalDateTime checkTime;
-
-
 }
