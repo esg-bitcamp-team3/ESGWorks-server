@@ -21,6 +21,11 @@ public class ReportDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private String createdBy;
+    private String updatedBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     public static ReportDTO fromEntity(Report report, CorporationDTO corpDto) {
         return ReportDTO.builder()
                 .id(report.getId())
