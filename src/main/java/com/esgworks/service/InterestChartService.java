@@ -7,6 +7,7 @@ import com.esgworks.dto.InterestChartDetailDTO;
 import com.esgworks.repository.ChartRepository;
 import com.esgworks.repository.InterestChartRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InterestChartService {
     private final InterestChartRepository interestChartRepository;
     private final UserService userService;
@@ -63,6 +65,12 @@ public class InterestChartService {
 
     // 생성
     public InterestChartDTO createInterestChart(InterestChartDTO dto) {
+        // 중복 확인: 해당 유저가 같은 차트를 이미 등록했는지
+        boolean exists = interestChartRepository.existsByUserIdAndChartId(dto.getUserId(), dto.getChartId());
+        if (exists) {
+            throw new IllegalArgumentException("이미 관심 차트에 등록된 항목입니다.");
+        }
+
         InterestChart interestChart = InterestChart.builder()
                 .interestChartId(dto.getInterestChartId())
                 .chartId(dto.getChartId())
@@ -91,9 +99,10 @@ public class InterestChartService {
     }
 
     // 삭제
-    public void deleteInterestChart(String interestChartId) {
-        InterestChart existing = interestChartRepository.findById(interestChartId)
+    public void deleteInterestChart(String chartId) {
+        InterestChart existing = interestChartRepository.findByChartId(chartId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 관심 차트가 존재하지 않습니다."));
+        log.info("deleteInterestChart: {}", existing);
         interestChartRepository.delete(existing);
     }
 }

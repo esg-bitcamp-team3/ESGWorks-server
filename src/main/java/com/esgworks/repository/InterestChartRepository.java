@@ -17,4 +17,6 @@ public interface InterestChartRepository extends MongoRepository<InterestChart, 
     // 특정 기업의 ESG 데이터를 조회
     List<InterestChart> findByUserId(String userId);
 
+    boolean existsByUserIdAndChartId(String userId, String chartId);
+
 }

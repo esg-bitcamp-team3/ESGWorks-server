@@ -60,9 +60,9 @@ public class InterestChartController {
         return ResponseEntity.ok(interestChartService.updateInterestChart(interestChartId, dto));
     }
 
-    @DeleteMapping("/{interestChartId}")
-    public ResponseEntity<Void> delete(@PathVariable String interestChartId) {
-        interestChartService.deleteInterestChart(interestChartId);
+    @DeleteMapping("/{chartId}")
+    public ResponseEntity<Void> delete(@PathVariable String chartId) {
+        interestChartService.deleteInterestChart(chartId);
         return ResponseEntity.noContent().build();
     }
 }

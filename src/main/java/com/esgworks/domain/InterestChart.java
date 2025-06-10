@@ -22,7 +22,6 @@ public class InterestChart {
 
     private String chartId;
     private String userId;
-
     private LocalDateTime checkTime;
 
     public InterestChartDTO toDTO() {
