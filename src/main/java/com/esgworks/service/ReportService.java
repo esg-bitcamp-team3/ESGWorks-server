@@ -1,6 +1,11 @@
 package com.esgworks.service;
 
 import com.esgworks.domain.Report;
+import com.esgworks.dto.CorporationDTO;
+import com.esgworks.dto.InterestReportsDTO;
+import com.esgworks.dto.ReportDTO;
+import com.esgworks.dto.ReportRequest;
+import com.esgworks.repository.InterestReportsRepository;
 import com.esgworks.dto.*;
 import com.esgworks.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +23,7 @@ import java.util.Set;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final CorporationService corporationService;
+    private final InterestReportsService interestReportsService;
     private final UserService userService;
 
     public Report createReport(ReportRequest dto,String userId) {
@@ -37,7 +43,13 @@ public class ReportService {
     public ReportDTO createReportAndReturnDTO(ReportRequest dto, String userId) {
         Report report = createReport(dto, userId);
         CorporationDTO corp = corporationService.getCorporationById(report.getCorpId());
-        return ReportDTO.fromEntity(report, corp);
+        InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
+        if(interestReportsDTO == null) {
+            return ReportDTO.fromEntity(report, corp, false);
+        }else{
+            return ReportDTO.fromEntity(report, corp, true);
+        }
+
     }
 
 
@@ -46,6 +58,12 @@ public class ReportService {
         return reports.stream()
                 .map(report -> {
                     CorporationDTO corpDto =  corporationService.getCorporationById(report.getCorpId());
+                    InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
+                    if(interestReportsDTO == null) {
+                        return ReportDTO.fromEntity(report, corpDto, false);
+                    }else{
+                        return ReportDTO.fromEntity(report, corpDto, true);
+                    }
                     UserDTO createdBy = userService.findById2(report.getCreatedBy());
                     UserDTO updatedBy = userService.findById2(report.getUpdatedBy());
                     return ReportDetailDTO.fromEntity(report, corpDto,createdBy, updatedBy);
@@ -74,13 +92,23 @@ public class ReportService {
     public ReportDTO updateReportAndReturnDTO(String id, ReportRequest dto, String userId) {
         Report updated = updateReportById(id, dto, userId);
         CorporationDTO corp = corporationService.getCorporationById(updated.getCorpId());
-        return ReportDTO.fromEntity(updated, corp);
+        InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(updated.getId());
+        if(interestReportsDTO == null) {
+            return ReportDTO.fromEntity(updated, corp, false);
+        }else{
+            return ReportDTO.fromEntity(updated, corp, true);
+        }
     }
 
     public ReportDTO getReportDTOById(String id) {
         Report report = getReportById(id);
         CorporationDTO corp = corporationService.getCorporationById(report.getCorpId());
-        return ReportDTO.fromEntity(report, corp);
+        InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
+        if(interestReportsDTO == null) {
+            return ReportDTO.fromEntity(report, corp, false);
+        }else{
+            return ReportDTO.fromEntity(report, corp, true);
+        }
     }
 
     public List<ReportDetailDTO> getReportsByCorpId(String userId, String sortField, String directionStr) {

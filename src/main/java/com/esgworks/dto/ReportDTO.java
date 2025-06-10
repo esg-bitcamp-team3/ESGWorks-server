@@ -4,6 +4,7 @@ import com.esgworks.domain.Report;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDateTime;
 
@@ -16,12 +17,13 @@ public class ReportDTO {
     private String content;
     private String userId;
     private CorporationDTO corp;
+    private Boolean isInterestedReport;
     private String createdBy;
     private String updatedBy;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
-    public static ReportDTO fromEntity(Report report, CorporationDTO corpDto) {
+    private LocalDateTime updatedAt;
+    public static ReportDTO fromEntity(Report report, CorporationDTO corpDto, Boolean interestedReport) {
         return ReportDTO.builder()
                 .id(report.getId())
                 .title(report.getTitle())
@@ -32,6 +34,7 @@ public class ReportDTO {
                 .updatedBy(report.getUpdatedBy())
                 .createdAt(report.getCreatedAt())
                 .updatedAt(report.getUpdatedAt())
+                .isInterestedReport(interestedReport)
                 .build();
     }
 }
