@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 @Builder
 public class InterestReportsDTO {
   private String interestReportId;
-  private ReportDTO report;
+  private String reportId;
   private String userId;
   private LocalDateTime checkTime;
 
-  public static  InterestReportsDTO fromEntity(InterestReports interestReports, ReportDTO report) {
+  public static  InterestReportsDTO fromEntity(InterestReports interestReports) {
     return InterestReportsDTO.builder()
       .interestReportId(interestReports.getInterestReportId())
-      .report(report)
+      .reportId(interestReports.getReportId())
       .userId(interestReports.getUserId())
       .checkTime(interestReports.getCheckTime())
       .build();

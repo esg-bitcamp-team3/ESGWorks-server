@@ -1,10 +1,8 @@
 package com.esgworks.controller;
 
-import com.esgworks.domain.Report;
-import com.esgworks.dto.CorporationDTO;
 import com.esgworks.dto.ReportDTO;
+import com.esgworks.dto.ReportDetailDTO;
 import com.esgworks.dto.ReportRequest;
-import com.esgworks.repository.ReportRepository;
 import com.esgworks.service.CorporationService;
 import com.esgworks.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +37,13 @@ public class ReportController {
         return ResponseEntity.ok(reportService.getReports());
     }
 
+    @GetMapping("/corp")
+    public ResponseEntity<List<ReportDetailDTO>> getAllCorpId(@AuthenticationPrincipal UserDetails userDetails,
+                                                              @RequestParam(defaultValue = "createdAt") String sortField,
+                                                              @RequestParam(defaultValue = "DESC") String direction) {
+        return ResponseEntity.ok(reportService.getReportsByCorpId(userDetails.getUsername(), sortField, direction));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ReportDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(reportService.getReportDTOById(id));
@@ -55,5 +60,12 @@ public class ReportController {
         reportService.deleteReportById(id);
         return ResponseEntity.noContent().build();
     }
-    //
+
+
+    @GetMapping("/interest")
+    public ResponseEntity<List<ReportDetailDTO>> getFavorite(@AuthenticationPrincipal UserDetails userDetails,
+                                                              @RequestParam(defaultValue = "createdAt") String sortField,
+                                                              @RequestParam(defaultValue = "DESC") String direction) {
+        return ResponseEntity.ok(reportService.getFavoriteReports(userDetails.getUsername(), sortField, direction));
+    }
 }

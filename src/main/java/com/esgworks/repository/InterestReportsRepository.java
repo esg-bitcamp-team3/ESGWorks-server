@@ -9,4 +9,7 @@ import java.util.Optional;
 
 public interface InterestReportsRepository extends MongoRepository<InterestReports, String> {
   List<InterestReports> findByUserId(String userId);
+
+  Optional<InterestReports> findByUserIdAndReportId(String userId, String reportId);
+  void deleteByUserIdAndReportId(String userId, String reportId);
 }
