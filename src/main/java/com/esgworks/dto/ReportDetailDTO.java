@@ -10,26 +10,26 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class ReportDTO {
+public class ReportDetailDTO {
     private String id;
     private String title;
     private String content;
     private String userId;
     private CorporationDTO corp;
-    private String createdBy;
-    private String updatedBy;
+    private UserDTO createdBy;
+    private UserDTO updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static ReportDTO fromEntity(Report report, CorporationDTO corpDto) {
-        return ReportDTO.builder()
+    public static ReportDetailDTO fromEntity(Report report, CorporationDTO corpDto, UserDTO createdBy, UserDTO updatedBy) {
+        return ReportDetailDTO.builder()
                 .id(report.getId())
                 .title(report.getTitle())
                 .content(report.getContent())
                 .userId(report.getUserId())
                 .corp(corpDto)
-                .createdBy(report.getCreatedBy())
-                .updatedBy(report.getUpdatedBy())
+                .createdBy(createdBy)
+                .updatedBy(updatedBy)
                 .createdAt(report.getCreatedAt())
                 .updatedAt(report.getUpdatedAt())
                 .build();
