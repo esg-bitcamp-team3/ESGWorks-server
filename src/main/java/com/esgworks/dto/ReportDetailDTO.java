@@ -20,8 +20,13 @@ public class ReportDetailDTO {
     private UserDTO updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Boolean isInterestedReport;
 
-    public static ReportDetailDTO fromEntity(Report report, CorporationDTO corpDto, UserDTO createdBy, UserDTO updatedBy) {
+    public static ReportDetailDTO fromEntity(Report report,
+                                             CorporationDTO corpDto,
+                                             UserDTO createdBy,
+                                             UserDTO updatedBy,
+                                             Boolean isInterestedReport) {
         return ReportDetailDTO.builder()
                 .id(report.getId())
                 .title(report.getTitle())
@@ -32,6 +37,7 @@ public class ReportDetailDTO {
                 .updatedBy(updatedBy)
                 .createdAt(report.getCreatedAt())
                 .updatedAt(report.getUpdatedAt())
+                .isInterestedReport(isInterestedReport)
                 .build();
     }
 }

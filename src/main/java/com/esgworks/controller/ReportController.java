@@ -33,7 +33,7 @@ public class ReportController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReportDetailDTO>> getAll() {
+    public ResponseEntity<List<ReportDTO>> getAll() {
         return ResponseEntity.ok(reportService.getReports());
     }
 
@@ -60,5 +60,12 @@ public class ReportController {
         reportService.deleteReportById(id);
         return ResponseEntity.noContent().build();
     }
-    //
+
+
+    @GetMapping("/interest")
+    public ResponseEntity<List<ReportDetailDTO>> getFavorite(@AuthenticationPrincipal UserDetails userDetails,
+                                                              @RequestParam(defaultValue = "createdAt") String sortField,
+                                                              @RequestParam(defaultValue = "DESC") String direction) {
+        return ResponseEntity.ok(reportService.getFavoriteReports(userDetails.getUsername(), sortField, direction));
+    }
 }

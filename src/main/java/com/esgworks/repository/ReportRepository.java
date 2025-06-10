@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface ReportRepository extends MongoRepository<Report, String> {
-  List<Report> findAll(Sort sort);
 }

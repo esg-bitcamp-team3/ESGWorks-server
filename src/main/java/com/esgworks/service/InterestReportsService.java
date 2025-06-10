@@ -2,7 +2,6 @@ package com.esgworks.service;
 
 import com.esgworks.domain.InterestReports;
 import com.esgworks.dto.InterestReportsDTO;
-import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.InterestReportsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +25,7 @@ public class InterestReportsService {
     String username = authentication.getName();
     userService.findById2(username);
     Optional<InterestReports> interestReports =  interestReportsRepository.findByUserIdAndReportId(username,reportId);
-    if(interestReports.isPresent()){
-      return interestReports.get().toDto();
-    }
-    return null;
+    return interestReports.map(InterestReports::toDto).orElse(null);
   }
 
   public List<InterestReportsDTO> getInterestReportsByUserId() {
@@ -39,8 +35,7 @@ public class InterestReportsService {
     log.info("getInterestReportsByUserId: " + username);
     userService.findById2(username);
     return interestReportsRepository.findByUserId(username).stream().map(
-      (interestReports) ->
-        InterestReportsDTO.fromEntity(interestReports))
+        InterestReportsDTO::fromEntity)
       .toList();
   }
 

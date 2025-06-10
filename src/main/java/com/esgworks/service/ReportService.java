@@ -5,17 +5,16 @@ import com.esgworks.dto.CorporationDTO;
 import com.esgworks.dto.InterestReportsDTO;
 import com.esgworks.dto.ReportDTO;
 import com.esgworks.dto.ReportRequest;
-import com.esgworks.repository.InterestReportsRepository;
 import com.esgworks.dto.*;
 import com.esgworks.repository.ReportRepository;
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -53,7 +52,7 @@ public class ReportService {
     }
 
 
-    public List<ReportDetailDTO> getReports() {
+    public List<ReportDTO> getReports() {
         List<Report> reports = reportRepository.findAll();
         return reports.stream()
                 .map(report -> {
@@ -64,9 +63,6 @@ public class ReportService {
                     }else{
                         return ReportDTO.fromEntity(report, corpDto, true);
                     }
-                    UserDTO createdBy = userService.findById2(report.getCreatedBy());
-                    UserDTO updatedBy = userService.findById2(report.getUpdatedBy());
-                    return ReportDetailDTO.fromEntity(report, corpDto,createdBy, updatedBy);
                 })
                 .toList();
     }
@@ -134,8 +130,47 @@ public class ReportService {
               CorporationDTO corpDto =  corporationService.getCorporationById(corpId);
               UserDTO createdBy = userService.findById2(report.getCreatedBy());
               UserDTO updatedBy = userService.findById2(report.getUpdatedBy());
-              return ReportDetailDTO.fromEntity(report, corpDto,createdBy, updatedBy);
+              InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
+              if(interestReportsDTO == null) {
+                  return ReportDetailDTO.fromEntity(report, corpDto, createdBy, updatedBy, false);
+              }else{
+                  return ReportDetailDTO.fromEntity(report, corpDto, createdBy, updatedBy, true);
+              }
           })
+          .toList();
+    }
+
+    public List<ReportDetailDTO> getFavoriteReports(String userId, String sortField, String directionStr) {
+        String corpId = userService.findById2(userId).getCorpId();
+
+        Sort.Direction direction;
+        try {
+            direction = Sort.Direction.fromString(directionStr);
+        } catch (IllegalArgumentException e) {
+            direction = Sort.Direction.DESC; // 기본값 설정
+        }
+
+        // 필드 화이트리스트 검증
+        Set<String> allowedSortFields = Set.of("createdAt", "updatedAt", "title"); // 필요한 필드만 허용
+        if (!allowedSortFields.contains(sortField)) {
+            throw new IllegalArgumentException("Invalid sort field: " + sortField);
+        }
+
+        Sort sort = Sort.by(direction, sortField);
+        List<Report> reports = reportRepository.findAll(sort);
+        return reports.stream()
+          .map(report -> {
+              CorporationDTO corpDto =  corporationService.getCorporationById(corpId);
+              UserDTO createdBy = userService.findById2(report.getCreatedBy());
+              UserDTO updatedBy = userService.findById2(report.getUpdatedBy());
+              InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
+              if(interestReportsDTO == null) {
+                  return null;
+              }else{
+                  return ReportDetailDTO.fromEntity(report, corpDto, createdBy, updatedBy, true);
+              }
+          })
+          .filter(Objects::nonNull)
           .toList();
     }
 
