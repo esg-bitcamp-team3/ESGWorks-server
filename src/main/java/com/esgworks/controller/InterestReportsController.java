@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/interestReports")
+@RequestMapping("/api/interest-reports")
 @RequiredArgsConstructor
 public class InterestReportsController {
     private final InterestReportsService interestReportsService;
@@ -24,7 +24,7 @@ public class InterestReportsController {
     }
 
     //보고서 즐겨찾기 추가
-    @PostMapping("/{reportId}") //reportId가 맞나..?
+    @PostMapping("/{reportId}")
     public ResponseEntity<InterestReportsDTO> addInterestReport(@PathVariable String reportId) {
         InterestReportsDTO dto = interestReportsService.createInterestReport(reportId);
         return ResponseEntity.ok(dto);
