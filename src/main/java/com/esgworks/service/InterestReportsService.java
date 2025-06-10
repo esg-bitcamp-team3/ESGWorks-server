@@ -46,4 +46,16 @@ public class InterestReportsService {
     return InterestReportsDTO.fromEntity(interestReports, reportService.getReportDTOById(reportId));
 
   }
+
+  public void deleteInterestReport(String reportId) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    log.info("deleteInterestReport: user={}, reportId={}" + username, reportId);
+
+    InterestReports interestReports = interestReportsRepository
+            .findByUserIdAndReportId(username,reportId)
+            .orElseThrow(()-> new IllegalStateException("즐겨찾기 내역이 없습니다."));
+
+    interestReportsRepository.deleteByUserIdAndReportId(username, reportId);
+  }
 }
