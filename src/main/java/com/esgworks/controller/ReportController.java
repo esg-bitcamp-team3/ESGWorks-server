@@ -22,7 +22,6 @@ import java.util.List;
 @Slf4j
 public class ReportController {
     private final ReportService reportService;
-    private final CorporationService corporationService;
 
     @PostMapping
     public ResponseEntity<ReportDTO> createReport(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReportRequest dto) {
@@ -46,8 +45,6 @@ public class ReportController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ReportDTO> update(@PathVariable String id, @AuthenticationPrincipal UserDetails userDetails ,@RequestBody ReportRequest dto) {
-        Report updated = reportService.updateReportById(id, dto, userDetails.getUsername());
-        CorporationDTO corp = corporationService.getCorporationById(updated.getCorpId());
         return ResponseEntity.ok(reportService.updateReportAndReturnDTO(id, dto, userDetails.getUsername()));
     }
 
