@@ -1,9 +1,7 @@
 package com.esgworks.service;
 
 import com.esgworks.domain.Report;
-import com.esgworks.dto.CorporationDTO;
-import com.esgworks.dto.ReportDTO;
-import com.esgworks.dto.ReportRequest;
+import com.esgworks.dto.*;
 import com.esgworks.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +14,7 @@ import java.util.List;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final CorporationService corporationService;
+    private final UserService userService;
 
     public Report createReport(ReportRequest dto,String userId) {
         Report report = Report.builder()
@@ -38,12 +37,14 @@ public class ReportService {
     }
 
 
-    public List<ReportDTO> getReports() {
+    public List<ReportDetailDTO> getReports() {
         List<Report> reports = reportRepository.findAll();
         return reports.stream()
                 .map(report -> {
                     CorporationDTO corpDto =  corporationService.getCorporationById(report.getCorpId());
-                    return ReportDTO.fromEntity(report, corpDto);
+                    UserDTO createdBy = userService.findById2(report.getCreatedBy());
+                    UserDTO updatedBy = userService.findById2(report.getUpdatedBy());
+                    return ReportDetailDTO.fromEntity(report, corpDto,createdBy, updatedBy);
                 })
                 .toList();
     }
