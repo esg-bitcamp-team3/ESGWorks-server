@@ -1,5 +1,6 @@
 package com.esgworks.domain;
 
+import com.esgworks.dto.InterestReportsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +21,14 @@ public class InterestReports {
   private String reportId;
   private String userId;
   private LocalDateTime checkTime;
+
+  public InterestReportsDTO toDto() {
+    return InterestReportsDTO
+            .builder()
+            .interestReportId(interestReportId)
+            .reportId(reportId)
+            .userId(userId)
+            .checkTime(checkTime)
+            .build();
+  }
 }
