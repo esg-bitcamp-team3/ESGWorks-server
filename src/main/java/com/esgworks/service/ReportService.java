@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -174,4 +175,14 @@ public class ReportService {
           .toList();
     }
 
+    public List<ReportDTO> searchReports(String keyword, String filter, String userId) {
+        List<Report> reports = reportRepository.search(keyword,filter,userId);
+        return reports.stream()
+                .map(report -> {
+                    CorporationDTO corpDto =  corporationService.getCorporationById(report.getCorpId());
+                    boolean interestReport = report.getFavoriteUserIds() != null && report.getFavoriteUserIds().contains(userId);
+                    return ReportDTO.fromEntity(report, corpDto, interestReport);
+                })
+                .collect(Collectors.toList());
+    }
 }

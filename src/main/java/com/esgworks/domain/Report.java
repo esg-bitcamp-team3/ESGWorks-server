@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,4 +26,12 @@ public class Report {
     private LocalDateTime updatedAt;
     private String createdBy;
     private String updatedBy;
+    private List<String> favoriteUserIds;
+
+    public List<String> getFavoriteUserIds() {
+        return favoriteUserIds;
+    }
+    public void setFavoriteUserIds(List<String> favoriteUserIds) {
+        this.favoriteUserIds = favoriteUserIds;
+    }
 }

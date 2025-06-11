@@ -20,7 +20,6 @@ import java.util.List;
 @Slf4j
 public class ReportController {
     private final ReportService reportService;
-    private final CorporationService corporationService;
 
     @PostMapping
     public ResponseEntity<ReportDTO> createReport(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReportRequest dto) {
@@ -67,5 +66,11 @@ public class ReportController {
                                                               @RequestParam(defaultValue = "createdAt") String sortField,
                                                               @RequestParam(defaultValue = "DESC") String direction) {
         return ResponseEntity.ok(reportService.getFavoriteReports(userDetails.getUsername(), sortField, direction));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ReportDTO>> search(@RequestParam String keyword, @RequestParam String filter, @AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails != null ? userDetails.getUsername() : null;
+        return ResponseEntity.ok(reportService.searchReports(keyword, filter, userId));
     }
 }
