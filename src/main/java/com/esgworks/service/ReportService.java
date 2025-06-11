@@ -108,7 +108,7 @@ public class ReportService {
         return reports.stream()
                 .map(report -> {
                     CorporationDTO corpDto =  corporationService.getCorporationById(report.getCorpId());
-                    boolean interestReport = report.getFavoriteUserIds() != null && report.getFavoriteUserIds().contains(userId);
+                    boolean interestReport = report.getInterestUserIds() != null && report.getInterestUserIds().contains(userId);
                     return ReportDTO.fromEntity(report, corpDto, interestReport);
                 })
                 .collect(Collectors.toList());

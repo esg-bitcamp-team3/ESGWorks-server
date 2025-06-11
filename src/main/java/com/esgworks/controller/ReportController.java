@@ -58,7 +58,10 @@ public class ReportController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ReportDTO>> search(@RequestParam String keyword, @RequestParam String filter, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<ReportDTO>> search(
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam String filter,
+            @AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails != null ? userDetails.getUsername() : null;
         return ResponseEntity.ok(reportService.searchReports(keyword, filter, userId));
     }

@@ -27,8 +27,8 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom{
         if("recent".equals(filter)) {
             query.with(org.springframework.data.domain.Sort.by(Sort.Direction.DESC, "updatedAt"));
         }
-        if("favorite".equals(filter) && userId != null) {
-            query.addCriteria(Criteria.where("favoriteUserIds").in(userId));
+        if("interest".equals(filter) && userId != null) {
+            query.addCriteria(Criteria.where("interestUserIds").in(userId));
         }
 
         return mongoTemplate.find(query, Report.class);
