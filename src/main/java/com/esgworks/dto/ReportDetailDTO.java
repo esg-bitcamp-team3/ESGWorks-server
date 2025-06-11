@@ -10,30 +10,34 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class ReportDTO {
+public class ReportDetailDTO {
     private String id;
     private String title;
     private String content;
     private String userId;
     private CorporationDTO corp;
-    private Boolean isInterestedReport;
-    private String createdBy;
-    private String updatedBy;
+    private UserDTO createdBy;
+    private UserDTO updatedBy;
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
-    public static ReportDTO fromEntity(Report report, CorporationDTO corpDto, Boolean interestedReport) {
-        return ReportDTO.builder()
+    private Boolean isInterestedReport;
+
+    public static ReportDetailDTO fromEntity(Report report,
+                                             CorporationDTO corpDto,
+                                             UserDTO createdBy,
+                                             UserDTO updatedBy,
+                                             Boolean isInterestedReport) {
+        return ReportDetailDTO.builder()
                 .id(report.getId())
                 .title(report.getTitle())
                 .content(report.getContent())
                 .userId(report.getUserId())
                 .corp(corpDto)
-                .createdBy(report.getCreatedBy())
-                .updatedBy(report.getUpdatedBy())
+                .createdBy(createdBy)
+                .updatedBy(updatedBy)
                 .createdAt(report.getCreatedAt())
                 .updatedAt(report.getUpdatedAt())
-                .isInterestedReport(interestedReport)
+                .isInterestedReport(isInterestedReport)
                 .build();
     }
 }

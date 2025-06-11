@@ -20,8 +20,7 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom{
         Query query = new Query();
         if(keyword != null && !keyword.isEmpty()) {
             query.addCriteria(new Criteria().orOperator(
-            Criteria.where("title").regex(keyword,"i"),
-                    Criteria.where("content").regex(keyword,"i")
+            Criteria.where("title").regex(keyword,"i")
             ));
         }
         if("recent".equals(filter)) {
