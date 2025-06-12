@@ -36,4 +36,14 @@ public class CategoryController {
         List<CategoryDetailDTO> categories = categoryService.getCategoriesBySectionId(sectionId);
         return ResponseEntity.ok(categories);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CategoryDTO>> search(@RequestParam(defaultValue = "") String keyword) {
+        return ResponseEntity.ok(categoryService.search(keyword));
+    }
+
+//    @GetMapping("/name")
+//    public ResponseEntity<CategoryDTO> getCategoryByName(@RequestParam String categoryName) {
+//        return ResponseEntity.ok(categoryService.getCategoryByName(categoryName));
+//    }
 }
