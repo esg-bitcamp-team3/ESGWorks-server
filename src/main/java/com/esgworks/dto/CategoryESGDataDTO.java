@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CategoryESGDataDTO {
     private String categoryId;
     private String sectionId;
-    private String unitId;
+    private UnitDTO unit;
     private String categoryName;
     private String description;
     private ESGDataDTO esgData;
