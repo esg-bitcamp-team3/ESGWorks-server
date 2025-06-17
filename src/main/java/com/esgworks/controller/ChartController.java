@@ -45,6 +45,18 @@ public class ChartController {
         return ResponseEntity.ok(chartService.getMyCharts(userDetails.getUsername()));
     }
 
+    // type별 차트 조회
+    @GetMapping("/my/{type}")
+    public ResponseEntity<List<ChartDetailDTO>> getMyChartsByType(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String type) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        return ResponseEntity.ok(chartService.getMyChartsByUserIdAndType(userDetails.getUsername(), type));
+    }
+
+
+
     @PostMapping
     public ResponseEntity<ChartDTO> createChart(@RequestBody ChartDTO dto, Authentication authentication) {
         String userId = authentication.getName();

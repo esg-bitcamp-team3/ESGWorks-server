@@ -4,6 +4,8 @@ import com.esgworks.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +28,7 @@ public class SecurityConfig {
                             var corsConfig = new org.springframework.web.cors.CorsConfiguration();
                             corsConfig.setAllowCredentials(true);
                             corsConfig.setAllowedOrigins(java.util.List.of("http://localhost:3000"));
-                            corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE"));
+                            corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE","PATCH"));
                             corsConfig.setAllowedHeaders(java.util.List.of("*"));
                             return corsConfig;
                         }))
@@ -38,6 +40,11 @@ public class SecurityConfig {
                 );
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+      return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean

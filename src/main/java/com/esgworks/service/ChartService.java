@@ -48,9 +48,9 @@ public class ChartService {
                     return chart.toDetailDTO(dataSetDetailDTOS);
                 }
         ).toList();
-
     }
 
+    // 유저 ID로 차트 조회
     public List<ChartDetailDTO> getMyCharts(String userId) {
         String corporationId = userService.findById(userId).getCorpId();
         List<Chart> charts = chartRepository.findAllByCorporationId(corporationId);
@@ -61,10 +61,33 @@ public class ChartService {
                     return chart.toDetailDTO(dataSetDetailDTOS);
                 }
         ).toList();
-
     }
 
-    // ESG 데이터 생성
+    // 유저 ID & 차트 TYPE별로 차트 조회
+    public List<ChartDetailDTO> getMyChartsByUserIdAndType(String userId, String type) {
+        String corporationId = userService.findById(userId).getCorpId();
+        List<Chart> charts = chartRepository.findAllByCorporationId(corporationId);
+
+        return charts.stream()
+                .filter(chart -> !dataSetService.getDetailedDataSetsByChartIdAndType(chart.getChartId(), type).isEmpty())
+                .map(chart -> getChartByChartId(chart.getChartId()))
+                .toList();
+    }
+
+    public ChartDetailDTO getMyChartsByChartIdAndType(String chartId, String type) {
+        Chart chart = chartRepository.findById(chartId)
+                .orElseThrow(() -> new NotFoundException("없는 차트입니다."));
+
+        List<DataSetDetailDTO> dataSetDetailDTOS = dataSetService.getDetailedDataSetsByChartIdAndType(chartId, type);
+
+        if (dataSetDetailDTOS.isEmpty()) {
+            return null; // 또는 Optional.empty() 로 감싸는 것도 고려 가능
+        }
+        return chart.toDetailDTO(dataSetDetailDTOS);
+    }
+
+
+    // 차트 생성
     public ChartDTO createChart(ChartDTO dto, String userId) {
         // 중복 체크
         chartRepository

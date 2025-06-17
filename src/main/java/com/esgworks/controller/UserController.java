@@ -1,12 +1,14 @@
 package com.esgworks.controller;
 
 import com.esgworks.domain.User;
+import com.esgworks.dto.UserDTO;
 import com.esgworks.dto.UserSignupRequest;
 import com.esgworks.dto.LoginRequest;
 import com.esgworks.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
@@ -52,6 +54,13 @@ public class UserController {
     @GetMapping("/my")
     public ResponseEntity<?> getMyInfo(Authentication authentication) {
         User user = userService.findById(authentication.getName());
+        return ResponseEntity.ok(user);
+    }
+    @GetMapping("/profile")
+    public ResponseEntity<UserDTO> getProfile() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UserDTO user = userService.findById2(username);
         return ResponseEntity.ok(user);
     }
 }

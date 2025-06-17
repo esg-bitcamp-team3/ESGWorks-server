@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Document(collection = "esgData")
 public class ESGData {
+    @Id
     private String esgDataId;
+
     private String categoryId;
     private String corpId;
     private String year;
@@ -38,5 +40,10 @@ public class ESGData {
                 .createdAt(createdAt)
                 .createdBy(createdBy)
                 .build();
+    }
+    public void updateValue(String value, String updatedBy) {
+        this.value = value;
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = updatedBy;
     }
 }

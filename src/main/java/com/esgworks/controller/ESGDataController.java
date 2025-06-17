@@ -3,8 +3,10 @@ package com.esgworks.controller;
 import com.esgworks.domain.ESGData;
 import com.esgworks.dto.CategorizedESGDataListDTO;
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.dataDTO.ESGDataFilterDTO;
 import com.esgworks.service.ESGDataService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/esg-data")
 @RequiredArgsConstructor
+@Slf4j
 public class ESGDataController {
 
     private final ESGDataService esgDataService;
@@ -27,17 +30,18 @@ public class ESGDataController {
     // 전체 ESG 데이터 조회
     @GetMapping
     public ResponseEntity<List<ESGDataDTO>> getAllESGData() {
+
         return ResponseEntity.ok(esgDataService.getAllESGData());
     }
 
     @GetMapping("/id/{esgDataId}")
-    public ResponseEntity<Optional<ESGData>> getESGDataById(String esgDataId) {
+public ResponseEntity<ESGDataDTO> getESGDataById(@PathVariable String esgDataId) {
         return ResponseEntity.ok(esgDataService.getESGDataById(esgDataId));
     }
 
     // 카테고리 ID로 ESG 데이터 조회
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<CategorizedESGDataListDTO> getESGDataById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String categoryId) {
+    public ResponseEntity<CategorizedESGDataListDTO> getESGDataByCategoryId(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String categoryId) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -48,13 +52,13 @@ public class ESGDataController {
     // 기업 ID로 ESG 데이터 조회
     @GetMapping("/corp/{corpId}")
     public ResponseEntity<List<ESGDataDTO>> getESGDataByCorpId(@PathVariable String corpId) {
-        return ResponseEntity.ok(esgDataService.getByCorpId(corpId));
+        return ResponseEntity.ok(esgDataService.getESGDataByCorpId(corpId));
     }
 
     // 기업 ID + 연도로 단일 ESG 데이터 조회
     @GetMapping("/corp/{corpId}/year/{year}")
     public ResponseEntity<List<ESGDataDTO>> getESGDataByCorpIdAndYear(@PathVariable String corpId, @PathVariable String year) {
-        return ResponseEntity.ok(esgDataService.getByCorpIdAndYear(corpId, year));
+        return ResponseEntity.ok(esgDataService.getESGDataByCorpIdAndYear(corpId, year));
     }
 
     @PostMapping
@@ -85,5 +89,22 @@ public class ESGDataController {
                                               @PathVariable String year) {
         esgDataService.deleteESGData(corpId, year);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> getESGDataByYearAndCategoryId(@RequestParam("categoryId") String categoryId,
+                                                                    @RequestParam("year") String year) {
+        ESGDataDTO esgData = esgDataService.getByCorpIdAndYearAndCategoryId(year, categoryId);
+        return ResponseEntity.ok(esgData);
+    }
+
+    @PatchMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> patchESGData(@RequestBody ESGDataFilterDTO dto) {
+        log.info(dto.toString());
+        return ResponseEntity.ok(esgDataService.patchESGData(dto));
+    }
+    @PostMapping("/data-value")
+    public ResponseEntity<ESGDataDTO> createESGData2(@RequestBody ESGDataFilterDTO dto) {
+        return ResponseEntity.ok(esgDataService.createESGData2(dto));
     }
 }

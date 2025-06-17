@@ -2,7 +2,9 @@ package com.esgworks.service;
 
 import com.esgworks.domain.Corporation;
 import com.esgworks.domain.User;
+import com.esgworks.dto.UserDTO;
 import com.esgworks.dto.UserSignupRequest;
+import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.CorporationRepository;
 import com.esgworks.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +56,9 @@ public class UserService {
     public User findById(String id) {
         return userRepository.findById(id).orElse(null);
     }
+    public UserDTO findById2(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("로그인 실패")).toDTO();
+    }
+
 }
 

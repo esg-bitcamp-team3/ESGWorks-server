@@ -32,4 +32,9 @@ public class SectionController {
     public ResponseEntity<SectionDTO> getSectionById(@PathVariable String sectionId) {
         return ResponseEntity.ok(sectionService.getSectionById(sectionId));
     }
+
+    @GetMapping("/search/{sectionId}")
+    public ResponseEntity<List<SectionDTO>> getSectionIdStartsWith(@PathVariable String sectionId) {
+        return ResponseEntity.ok(sectionService.getSectionIdStartsWith(sectionId));
+    }
 }
