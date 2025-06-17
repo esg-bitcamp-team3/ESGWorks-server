@@ -20,6 +20,8 @@ public class Criterion {
 
     private String criterionName;
 
+    private String corporationId;
+
     public CriterionDTO toDTO() {
         return CriterionDTO.builder()
                 .criterionId(criterionId)
