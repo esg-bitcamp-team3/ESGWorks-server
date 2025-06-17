@@ -26,12 +26,12 @@ public class Report {
     private LocalDateTime updatedAt;
     private String createdBy;
     private String updatedBy;
-    private List<String> favoriteUserIds;
+    private List<String> interestUserIds;
 
-    public List<String> getFavoriteUserIds() {
-        return favoriteUserIds;
+    public List<String> getInterestUserIds() {
+        return interestUserIds;
     }
-    public void setFavoriteUserIds(List<String> favoriteUserIds) {
-        this.favoriteUserIds = favoriteUserIds;
+    public void setInterestUserIds(List<String> interestUserIds) {
+        this.interestUserIds = interestUserIds;
     }
 }

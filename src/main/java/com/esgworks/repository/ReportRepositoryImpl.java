@@ -20,15 +20,14 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom{
         Query query = new Query();
         if(keyword != null && !keyword.isEmpty()) {
             query.addCriteria(new Criteria().orOperator(
-            Criteria.where("title").regex(keyword,"i"),
-                    Criteria.where("content").regex(keyword,"i")
+            Criteria.where("title").regex(keyword,"i")
             ));
         }
         if("recent".equals(filter)) {
             query.with(org.springframework.data.domain.Sort.by(Sort.Direction.DESC, "updatedAt"));
         }
-        if("favorite".equals(filter) && userId != null) {
-            query.addCriteria(Criteria.where("favoriteUserIds").in(userId));
+        if("interest".equals(filter) && userId != null) {
+            query.addCriteria(Criteria.where("interestUserIds").in(userId));
         }
 
         return mongoTemplate.find(query, Report.class);

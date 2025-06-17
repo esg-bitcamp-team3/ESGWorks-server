@@ -1,11 +1,13 @@
 package com.esgworks.service;
 
+import com.esgworks.domain.InterestReports;
 import com.esgworks.domain.Report;
 import com.esgworks.dto.CorporationDTO;
 import com.esgworks.dto.InterestReportsDTO;
 import com.esgworks.dto.ReportDTO;
 import com.esgworks.dto.ReportRequest;
 import com.esgworks.dto.*;
+import com.esgworks.repository.InterestReportsRepository;
 import com.esgworks.repository.ReportRepository;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class ReportService {
     private final CorporationService corporationService;
     private final InterestReportsService interestReportsService;
     private final UserService userService;
+    private final InterestReportsRepository interestReportsRepository;
 
     public Report createReport(ReportRequest dto,String userId) {
         Report report = Report.builder()
@@ -176,13 +179,38 @@ public class ReportService {
     }
 
     public List<ReportDTO> searchReports(String keyword, String filter, String userId) {
-        List<Report> reports = reportRepository.search(keyword,filter,userId);
+      if ("interest".equals(filter)) {
+        //관심 reportId 리스트
+        List<InterestReports> interestReports = interestReportsRepository.findByUserId(userId);
+        List<String> reportIds = interestReports.stream().map(InterestReports::getReportId).toList();
+
+        //reportsID로 검색
+        List<Report> reports = reportRepository.findAllById(reportIds);
+
+        //키워드 추가 필터링
+        if (keyword != null && !keyword.isEmpty()) {
+          String lowerKeyword = keyword.toLowerCase();
+          reports = reports.stream()
+            .filter(report ->
+              (report.getTitle() != null && report.getTitle().toLowerCase().contains(lowerKeyword)) ||
+                (report.getContent() != null && report.getContent().toLowerCase().contains(lowerKeyword))
+            )
+            .toList();
+        }
         return reports.stream()
-                .map(report -> {
-                    CorporationDTO corpDto =  corporationService.getCorporationById(report.getCorpId());
-                    boolean interestReport = report.getFavoriteUserIds() != null && report.getFavoriteUserIds().contains(userId);
-                    return ReportDTO.fromEntity(report, corpDto, interestReport);
-                })
-                .collect(Collectors.toList());
+          .map(report -> {
+            CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
+            return ReportDTO.fromEntity(report, corpDto, true);
+          })
+          .toList();
+      } else {
+        List<Report> reports = reportRepository.search(keyword, filter, userId);
+        return reports.stream()
+          .map(report -> {
+            CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
+            return ReportDTO.fromEntity(report, corpDto, false);
+          })
+          .toList();
+      }
     }
 }
