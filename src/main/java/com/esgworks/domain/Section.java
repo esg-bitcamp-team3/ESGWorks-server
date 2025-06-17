@@ -28,4 +28,10 @@ public class Section {
                 .criterionId(criterionId)
                 .build();
     }
+
+    public void updateSection(String sectionName, String criterionId) {
+        this.sectionName = sectionName;
+        this.criterionId = criterionId;
+    }
+
 }
