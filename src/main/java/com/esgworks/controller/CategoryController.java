@@ -3,7 +3,6 @@ package com.esgworks.controller;
 import com.esgworks.dto.CategoryDTO;
 import com.esgworks.dto.CategoryDetailDTO;
 import com.esgworks.service.CategoryService;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,4 +37,13 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<CategoryDTO>> search(@RequestParam(defaultValue = "") String keyword) {
+        return ResponseEntity.ok(categoryService.search(keyword));
+    }
+
+//    @GetMapping("/name")
+//    public ResponseEntity<CategoryDTO> getCategoryByName(@RequestParam String categoryName) {
+//        return ResponseEntity.ok(categoryService.getCategoryByName(categoryName));
+//    }
 }

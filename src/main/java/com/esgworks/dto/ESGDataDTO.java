@@ -23,4 +23,5 @@ public class ESGDataDTO {
     private String updatedBy;
     private LocalDateTime createdAt;
     private String createdBy;
+
 }

@@ -31,6 +31,9 @@ public class SectionService {
     }
 
     public List<SectionDTO> getSectionIdStartsWith(String sectionId) {
-        return sectionRepository.findBySectionIdStartsWith(sectionId.substring(0,1)).stream().map(Section::toDTO).toList();
+        if(sectionId.equals("0") || sectionId.isEmpty()) {
+            getAllSections();
+        }
+      return sectionRepository.findBySectionIdStartsWith(sectionId.substring(0,1)).stream().map(Section::toDTO).toList();
     }
 }

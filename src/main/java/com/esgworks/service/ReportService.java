@@ -179,39 +179,38 @@ public class ReportService {
     }
 
     public List<ReportDTO> searchReports(String keyword, String filter, String userId) {
-        if("interest".equals(filter)) {
-            //관심 reportId 리스트
-            List<InterestReports> interestReports = interestReportsRepository.findByUserId(userId);
-            List<String> reportIds = interestReports.stream().map(InterestReports::getReportId).toList();
+      if ("interest".equals(filter)) {
+        //관심 reportId 리스트
+        List<InterestReports> interestReports = interestReportsRepository.findByUserId(userId);
+        List<String> reportIds = interestReports.stream().map(InterestReports::getReportId).toList();
 
-            //reportsID로 검색
-            List<Report> reports = reportRepository.findAllById(reportIds);
+        //reportsID로 검색
+        List<Report> reports = reportRepository.findAllById(reportIds);
 
-            //키워드 추가 필터링
-            if(keyword != null && !keyword.isEmpty()) {
-                String lowerKeyword = keyword.toLowerCase();
-                reports = reports.stream()
-                        .filter(report ->
-                                (report.getTitle() != null && report.getTitle().toLowerCase().contains(lowerKeyword)) ||
-                                        (report.getContent() != null && report.getContent().toLowerCase().contains(lowerKeyword))
-                        )
-                        .toList();
-            }
-            return reports.stream()
-                    .map(report -> {
-                        CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
-                        return ReportDTO.fromEntity(report, corpDto, true);
-                    })
-                    .toList();
-        } else {
-            List<Report> reports = reportRepository.search(keyword, filter, userId);
-            return reports.stream()
-                    .map(report -> {
-                        CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
-                        return ReportDTO.fromEntity(report, corpDto, false);
-                    })
-                    .toList();
+        //키워드 추가 필터링
+        if (keyword != null && !keyword.isEmpty()) {
+          String lowerKeyword = keyword.toLowerCase();
+          reports = reports.stream()
+            .filter(report ->
+              (report.getTitle() != null && report.getTitle().toLowerCase().contains(lowerKeyword)) ||
+                (report.getContent() != null && report.getContent().toLowerCase().contains(lowerKeyword))
+            )
+            .toList();
         }
-
+        return reports.stream()
+          .map(report -> {
+            CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
+            return ReportDTO.fromEntity(report, corpDto, true);
+          })
+          .toList();
+      } else {
+        List<Report> reports = reportRepository.search(keyword, filter, userId);
+        return reports.stream()
+          .map(report -> {
+            CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
+            return ReportDTO.fromEntity(report, corpDto, false);
+          })
+          .toList();
+      }
     }
 }

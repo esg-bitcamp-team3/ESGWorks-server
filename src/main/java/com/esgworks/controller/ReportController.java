@@ -1,11 +1,8 @@
 package com.esgworks.controller;
 
-import com.esgworks.domain.Report;
-import com.esgworks.dto.CorporationDTO;
 import com.esgworks.dto.ReportDTO;
 import com.esgworks.dto.ReportDetailDTO;
 import com.esgworks.dto.ReportRequest;
-import com.esgworks.repository.ReportRepository;
 import com.esgworks.service.CorporationService;
 import com.esgworks.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -54,8 +51,7 @@ public class ReportController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ReportDTO> update(@PathVariable String id, @AuthenticationPrincipal UserDetails userDetails ,@RequestBody ReportRequest dto) {
-        Report updated = reportService.updateReportById(id, dto, userDetails.getUsername());
-        CorporationDTO corp = corporationService.getCorporationById(updated.getCorpId());
+
         return ResponseEntity.ok(reportService.updateReportAndReturnDTO(id, dto, userDetails.getUsername()));
     }
 

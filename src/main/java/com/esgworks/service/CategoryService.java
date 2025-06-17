@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,4 +59,46 @@ public class CategoryService {
                 .toList();
     }
 
+    public List<CategoryDTO> search(String keyword) {
+        List<Category> categories;
+
+        if (keyword == null || keyword.isBlank()) {
+            categories = categoryRepository.findAll(); // keyword가 없으면 전체 목록 반환
+        } else {
+            categories = categoryRepository.search(keyword); // 커스텀 검색
+        }
+
+        return categories.stream().map(Category::toDTO).toList();
+    }
+
+    // 이름으로 조회
+    public List<CategoryDTO> getCategoryByName(String categoryName) {
+        List<Category> categories ;
+        if(categoryName == null || categoryName.isBlank()) {
+            categories = categoryRepository.findAll();
+        }else{
+            categories = categoryRepository.findByCategoryNameContainingIgnoreCase(categoryName);
+        }
+        return categories.stream()
+          .map(Category::toDTO)
+          .toList();
+    }
+
+
+    public List<CategoryDTO> getCategoryBySectionId(String sectionId, String categoryName) {
+        List<Category> categories ;
+        if(categoryName == null || categoryName.isBlank()) {
+            categories = categoryRepository.findAllBySectionId(sectionId);
+        }else{
+            categories = categoryRepository.findAllBySectionIdAndCategoryNameContainingIgnoreCase(sectionId, categoryName);
+        }
+        return categories.stream()
+          .map(Category::toDTO)
+          .toList();
+    }
+
+    public List<CategoryDTO> getCategoryBySectionIdAndCategoryName(String sectionId, String categoryName) {
+        List<Category> categories  = categoryRepository.findAllBySectionIdAndCategoryNameContainingIgnoreCase(sectionId, categoryName);
+        return categories.stream().map(Category::toDTO).toList();
+    }
 }
