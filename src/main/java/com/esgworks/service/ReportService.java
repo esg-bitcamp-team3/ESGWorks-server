@@ -11,25 +11,27 @@ import com.esgworks.repository.InterestReportsRepository;
 import com.esgworks.repository.ReportRepository;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Objects;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class ReportService {
-    private final ReportRepository reportRepository;
+  private static final Logger log = LoggerFactory.getLogger(ReportService.class);
+  private final ReportRepository reportRepository;
     private final CorporationService corporationService;
     private final InterestReportsService interestReportsService;
     private final UserService userService;
-    private final InterestReportsRepository interestReportsRepository;
+  private final InterestReportsRepository interestReportsRepository;
 
-    public Report createReport(ReportRequest dto,String userId) {
+  public Report createReport(ReportRequest dto,String userId) {
         Report report = Report.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
@@ -58,17 +60,7 @@ public class ReportService {
 
     public List<ReportDTO> getReports() {
         List<Report> reports = reportRepository.findAll();
-        return reports.stream()
-                .map(report -> {
-                    CorporationDTO corpDto =  corporationService.getCorporationById(report.getCorpId());
-                    InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
-                    if(interestReportsDTO == null) {
-                        return ReportDTO.fromEntity(report, corpDto, false);
-                    }else{
-                        return ReportDTO.fromEntity(report, corpDto, true);
-                    }
-                })
-                .toList();
+      return getReportDTOS(reports);
     }
 
     public Report getReportById(String id) {
@@ -205,12 +197,22 @@ public class ReportService {
           .toList();
       } else {
         List<Report> reports = reportRepository.search(keyword, filter, userId);
-        return reports.stream()
-          .map(report -> {
-            CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
-            return ReportDTO.fromEntity(report, corpDto, false);
-          })
-          .toList();
+        return getReportDTOS(reports);
       }
     }
+
+  private List<ReportDTO> getReportDTOS(List<Report> reports) {
+    return reports.stream()
+      .map(report -> {
+        CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
+        InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
+        log.info(String.valueOf(interestReportsDTO));
+        if(interestReportsDTO == null) {
+          return ReportDTO.fromEntity(report, corpDto, false);
+        }else {
+          return ReportDTO.fromEntity(report, corpDto, true);
+        }
+      })
+      .toList();
+  }
 }
