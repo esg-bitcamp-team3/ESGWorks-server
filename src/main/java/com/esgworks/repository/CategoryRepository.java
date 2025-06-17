@@ -16,5 +16,6 @@ public interface CategoryRepository extends MongoRepository<Category, String>, C
     List<Category> search(String keyword);
 
     List<Category> findAllBySectionIdAndCategoryNameContainingIgnoreCase(String sectionId, String categoryName);
+    List<Category> findAllBySectionIdAndCategoryIdStartingWith(String sectionId, String categoryId);
 
 }

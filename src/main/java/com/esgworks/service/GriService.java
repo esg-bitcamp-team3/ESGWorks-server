@@ -48,6 +48,29 @@ public class GriService {
 
   }
 
+  public SectionCategoryESGDataDTO search(String year, String sectionId, String categoryName) {
+    SectionDTO section = sectionService.getSectionById(sectionId);
+
+    return SectionCategoryESGDataDTO.builder()
+            .sectionId(section.getSectionId())
+            .sectionName(section.getSectionName())
+            .criterionId(section.getCriterionId())
+            .categoryESGDataList(
+                    categoryService.getCategoryBySectionIdAndCategoryName(section.getSectionId(), categoryName).stream()
+                            .map(category ->
+                                    CategoryESGDataDTO.builder()
+                                            .categoryId(category.getCategoryId())
+                                            .sectionId(category.getSectionId())
+                                            .unit(unitService.getUnitById( category.getUnitId()))
+                                            .categoryName(category.getCategoryName())
+                                            .description(category.getDescription())
+                                            .esgData(esgDataService.getByCorpIdAndYearAndCategoryId(year, category.getCategoryId()))
+                                            .build()
+                            ).toList())
+            .build();
+
+  }
+
   private SectionCategoryESGDataDTO getSectionCategoryESGDataDTO (String year, String categoryName, SectionDTO section) {
     return SectionCategoryESGDataDTO.builder()
       .sectionId(section.getSectionId())

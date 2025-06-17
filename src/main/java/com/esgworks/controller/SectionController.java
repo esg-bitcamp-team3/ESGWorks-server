@@ -1,5 +1,6 @@
 package com.esgworks.controller;
 
+import com.esgworks.dto.CategoryDTO;
 import com.esgworks.dto.SectionDTO;
 import com.esgworks.service.SectionService;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,21 @@ public class SectionController {
     @GetMapping("/search/{sectionId}")
     public ResponseEntity<List<SectionDTO>> getSectionIdStartsWith(@PathVariable String sectionId) {
         return ResponseEntity.ok(sectionService.getSectionIdStartsWith(sectionId));
+    }
+    @PostMapping
+    public ResponseEntity<SectionDTO> createSection(@RequestBody SectionDTO dto) {
+        sectionService.createSection(dto);
+        return ResponseEntity.ok(dto);
+    }
+    @PutMapping("/{sectionId}")
+    public ResponseEntity<SectionDTO> updateSection(@PathVariable Long sectionId, @RequestBody SectionDTO dto) {
+        dto.setSectionId(String.valueOf(sectionId));  // 경로에서 받은 categoryId를 DTO에 덮어씀
+        SectionDTO updatedDto = sectionService.updateSection(dto);
+        return ResponseEntity.ok(updatedDto);  // 진짜 저장된 값 기준으로 응답
+    }
+    @DeleteMapping("/{sectionId}")
+    public ResponseEntity<SectionDTO> deleteSection(@PathVariable String sectionId) {
+        sectionService.deleteSection(sectionId);
+        return ResponseEntity.noContent().build();
     }
 }

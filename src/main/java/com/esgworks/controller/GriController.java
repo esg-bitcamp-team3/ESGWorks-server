@@ -20,16 +20,11 @@ public class GriController {
     return ResponseEntity.ok(griService.getSectionCategories(year,categoryName));
   }
 
-  @GetMapping("/section")
-  public ResponseEntity<List<SectionCategoryESGDataDTO>> getSectionCategories( @RequestParam String year,
-                                                                               @RequestParam String sectionId,
-                                                                               @RequestParam String categoryName) {
-    return ResponseEntity.ok(griService.getSectionCategoriesBySectionId(year,sectionId, categoryName));
-  }
-
-  @GetMapping("/select")
-  public ResponseEntity<SectionCategoryESGDataDTO> getSelectedSectionCategories( @RequestParam String year,
-                                                                               @RequestParam String sectionId) {
-    return ResponseEntity.ok(griService.getSectionSelected(year,sectionId));
+  @GetMapping("/search")
+  public ResponseEntity<SectionCategoryESGDataDTO> getSelectedSectionCategories(
+          @RequestParam(required = false, defaultValue = "2020") String year,
+          @RequestParam(required = false) String sectionId,
+          @RequestParam(required = false, defaultValue = "") String categoryName) {
+    return ResponseEntity.ok(griService.search(year, sectionId, categoryName));
   }
 }
