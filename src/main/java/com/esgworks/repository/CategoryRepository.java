@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface CategoryRepository extends MongoRepository<Category, String> {
     Optional<Category> findByCategoryId(String categoryId);
     List<Category> findAllBySectionId(String sectionId);
+    List<Category> findAllBySectionIdAndCategoryIdStartingWith(String sectionId, String categoryId);
 
 }

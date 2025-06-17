@@ -10,6 +10,7 @@ import com.esgworks.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,12 +41,14 @@ public class CategoryService {
     }
 
     // sectionId로 카테고리 목록 조회
-    public List<CategoryDetailDTO> getCategoriesBySectionId(String sectionId) {
-        List<Category> categories = categoryRepository.findAllBySectionId(sectionId);
+    public List<CategoryDetailDTO> getCategoriesBySectionId(String sectionId, String startsWith) {
+        List<Category> categories = categoryRepository.findAllBySectionIdAndCategoryIdStartingWith(sectionId, startsWith);
+
         if (categories.isEmpty()) {
-            throw new NotFoundException("해당 섹션에 대한 카테고리가 존재하지 않습니다.");
+            return new ArrayList<>();
         }
-        SectionDTO section = sectionService.getSectionById(sectionId); // 공통 section 조회
+
+        SectionDTO section = sectionService.getSectionById(sectionId);
 
         return categories.stream()
                 .map(category -> {
@@ -54,4 +57,5 @@ public class CategoryService {
                 })
                 .toList();
     }
+
 }

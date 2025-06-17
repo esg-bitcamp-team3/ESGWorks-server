@@ -3,6 +3,7 @@ package com.esgworks.controller;
 import com.esgworks.dto.CategoryDTO;
 import com.esgworks.dto.CategoryDetailDTO;
 import com.esgworks.service.CategoryService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,9 @@ public class CategoryController {
 
     // sectionId로 카테고리 리스트 조회
     @GetMapping("/by-section/{sectionId}")
-    public ResponseEntity<List<CategoryDetailDTO>> getCategoriesBySectionId(@PathVariable String sectionId) {
-        List<CategoryDetailDTO> categories = categoryService.getCategoriesBySectionId(sectionId);
+    public ResponseEntity<List<CategoryDetailDTO>> getCategoriesBySectionId(@PathVariable String sectionId, @RequestParam(value = "starts-with", required = false, defaultValue = "") String startsWith) {
+        List<CategoryDetailDTO> categories = categoryService.getCategoriesBySectionId(sectionId, startsWith);
         return ResponseEntity.ok(categories);
     }
+
 }
