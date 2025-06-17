@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
 @Getter
+@Setter  //
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "category")
@@ -41,4 +42,5 @@ public class Category {
                 .description(description)
                 .build();
     }
+
 }
