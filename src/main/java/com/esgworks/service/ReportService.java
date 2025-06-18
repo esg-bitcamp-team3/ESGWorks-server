@@ -206,7 +206,6 @@ public class ReportService {
       .map(report -> {
         CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
         InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
-        log.info(String.valueOf(interestReportsDTO));
         if(interestReportsDTO == null) {
           return ReportDTO.fromEntity(report, corpDto, false);
         }else {

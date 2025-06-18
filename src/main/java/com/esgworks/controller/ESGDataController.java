@@ -92,8 +92,8 @@ public ResponseEntity<ESGDataDTO> getESGDataById(@PathVariable String esgDataId)
     }
 
     @GetMapping("/data-value")
-    public ResponseEntity<ESGDataDTO> getESGDataByYearAndCategoryId(@RequestParam("categoryId") String categoryId,
-                                                                    @RequestParam("year") String year) {
+    public ResponseEntity<ESGDataDTO> getESGDataByYearAndCategoryId(@RequestParam String categoryId,
+                                                                    @RequestParam(required = false, defaultValue = "2020") String year) {
         ESGDataDTO esgData = esgDataService.getByCorpIdAndYearAndCategoryId(year, categoryId);
         return ResponseEntity.ok(esgData);
     }

@@ -16,5 +16,6 @@ public class CategoryESGDataDTO {
     private UnitDTO unit;
     private String categoryName;
     private String description;
+
     private ESGDataDTO esgData;
 }

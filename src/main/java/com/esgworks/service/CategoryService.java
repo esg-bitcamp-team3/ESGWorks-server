@@ -74,13 +74,20 @@ public class CategoryService {
     }
 
     // 이름으로 조회
+//    public List<CategoryDTO> getCategoryByName(String categoryName) {
+//        List<Category> categories ;
+//        if(categoryName == null || categoryName.isBlank()) {
+//            categories = categoryRepository.findAll();
+//        }else{
+//            categories = categoryRepository.findByCategoryNameContainingIgnoreCase(categoryName);
+//        }
+//        return categories.stream()
+//          .map(Category::toDTO)
+//          .toList();
+//    }
     public List<CategoryDTO> getCategoryByName(String categoryName) {
-        List<Category> categories ;
-        if(categoryName == null || categoryName.isBlank()) {
-            categories = categoryRepository.findAll();
-        }else{
-            categories = categoryRepository.findByCategoryNameContainingIgnoreCase(categoryName);
-        }
+        List<Category> categories = categoryRepository.findByCategoryNameContainingIgnoreCase(categoryName);
+
         return categories.stream()
           .map(Category::toDTO)
           .toList();
