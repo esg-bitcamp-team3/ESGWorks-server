@@ -48,13 +48,11 @@ public class CriterionService {
         if(authentication == null){
             throw new NotFoundException("로그인하세요");
         }
-        Optional<Criterion> optionalCriterion = criterionRepository.findByCriterionId(dto.getCriterionId());
-        if (optionalCriterion.isPresent()) {
-            throw new DuplicateException("이미 존재하는 기준입니다.");
-        }
+        UserDTO user = userService.findById2(authentication.getName());
+
         Criterion criterion = Criterion.builder()
-                .criterionId(dto.getCriterionId())
                 .criterionName(dto.getCriterionName())
+                .corporationId(user.getCorpId())
                 .build();
 
         criterionRepository.save(criterion);
@@ -63,6 +61,7 @@ public class CriterionService {
         return CriterionDTO.builder()
                 .criterionId(criterion.getCriterionId())        // ID
                 .criterionName(criterion.getCriterionName())    // 기준 이름
+                .corporationId(criterion.getCorporationId())
                 .build();
     }
 
