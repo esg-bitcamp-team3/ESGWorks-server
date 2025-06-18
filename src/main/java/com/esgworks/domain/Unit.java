@@ -2,10 +2,7 @@ package com.esgworks.domain;
 
 
 import com.esgworks.dto.UnitDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,7 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Unit {
     @Id
     private String unitId;
-
     private String unitName;
     private String type;
 
@@ -27,5 +23,9 @@ public class Unit {
                 .unitName(unitName)
                 .type(type)
                 .build();
+    }
+    public void updateUnit(String unitName, String type) {
+        this.unitName = unitName;
+        this.type = type;
     }
 }
