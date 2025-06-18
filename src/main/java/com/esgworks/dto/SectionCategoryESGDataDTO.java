@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SectionCategoryESGDataDTO {
+public class    SectionCategoryESGDataDTO {
     private String sectionId;
     private String sectionName;
     private String criterionId;
