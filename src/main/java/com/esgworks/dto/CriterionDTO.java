@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class CriterionDTO {
     private String criterionId;
     private String criterionName;
+    private String corporationId;
 }

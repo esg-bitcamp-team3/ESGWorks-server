@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Category {
     @Id
     private String categoryId;
-
     private String sectionId;
     private String unitId;
     private String categoryName;
@@ -44,3 +43,5 @@ public class Category {
     }
 
 }
+
+

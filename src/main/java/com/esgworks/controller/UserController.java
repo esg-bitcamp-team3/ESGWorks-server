@@ -1,13 +1,12 @@
 package com.esgworks.controller;
 
 import com.esgworks.domain.User;
-import com.esgworks.dto.UserDTO;
-import com.esgworks.dto.UserSignupRequest;
-import com.esgworks.dto.LoginRequest;
+import com.esgworks.dto.*;
 import com.esgworks.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +61,17 @@ public class UserController {
         String username = authentication.getName();
         UserDTO user = userService.findById2(username);
         return ResponseEntity.ok(user);
+    }
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody UserDTO dto) {
+        dto.setId(String.valueOf(userId));
+        UserDTO updatedDto = userService.updateUser(dto);
+        return ResponseEntity.ok(updatedDto);
+    }
+    @PatchMapping("/password")
+    public ResponseEntity<String> updatePassword(@AuthenticationPrincipal Authentication authentication,
+                                            @RequestBody PasswordUpdateDTO dto) {
+
+        return ResponseEntity.ok(userService.updatePassword(authentication.getName(), dto));
     }
 }
