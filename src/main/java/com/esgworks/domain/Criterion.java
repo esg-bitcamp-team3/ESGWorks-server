@@ -24,6 +24,7 @@ public class Criterion {
         return CriterionDTO.builder()
                 .criterionId(criterionId)
                 .criterionName(criterionName)
+                .corporationId(corporationId)
                 .build();
     }
 }

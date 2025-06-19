@@ -27,4 +27,11 @@ public class GriController {
           @RequestParam(required = false, defaultValue = "") String categoryName) {
     return ResponseEntity.ok(griService.search(year, sectionId, categoryName));
   }
+  @GetMapping("/search-category")
+  public ResponseEntity<List<SectionCategoryESGDataDTO>> getSelectedSectionCategoryName(
+    @RequestParam(required = false, defaultValue = "2020") String year,
+//    @RequestParam(required = false) String sectionId,
+    @RequestParam(required = false, defaultValue = "") String categoryName) {
+    return ResponseEntity.ok(griService.searchingCategoryName(year, categoryName));
+  }
 }

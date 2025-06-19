@@ -30,4 +30,6 @@ public class User {
           .corpId(corpId)
           .build();
     }
-}
+    public void updatePassword(String password) {
+        this.password = password;
+}}
