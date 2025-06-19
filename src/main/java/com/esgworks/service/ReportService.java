@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -170,7 +172,7 @@ public class ReportService {
           .toList();
     }
 
-    public List<ReportDTO> searchReports(String keyword, String filter, String userId) {
+    public List<ReportDetailDTO> searchReports(String keyword, String filter, String userId) {
       if ("interest".equals(filter)) {
         //관심 reportId 리스트
         List<InterestReports> interestReports = interestReportsRepository.findByUserId(userId);
@@ -192,12 +194,15 @@ public class ReportService {
         return reports.stream()
           .map(report -> {
             CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
-            return ReportDTO.fromEntity(report, corpDto, true);
+            return ReportDetailDTO.fromEntity(report, corpDto,
+              userService.findById2(report.getCreatedBy()),
+              userService.findById2(report.getUpdatedBy()),
+              true);
           })
           .toList();
       } else {
         List<Report> reports = reportRepository.search(keyword, filter, userId);
-        return getReportDTOS(reports);
+        return getReportDetailDTOS(reports);
       }
     }
 
@@ -210,6 +215,25 @@ public class ReportService {
           return ReportDTO.fromEntity(report, corpDto, false);
         }else {
           return ReportDTO.fromEntity(report, corpDto, true);
+        }
+      })
+      .toList();
+  }
+  private List<ReportDetailDTO> getReportDetailDTOS(List<Report> reports) {
+    return reports.stream()
+      .map(report -> {
+        CorporationDTO corpDto = corporationService.getCorporationById(report.getCorpId());
+        InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
+        if(interestReportsDTO == null) {
+          return ReportDetailDTO.fromEntity(report, corpDto,
+            userService.findById2(report.getCreatedBy()),
+            userService.findById2(report.getUpdatedBy()),
+            false);
+        }else {
+          return ReportDetailDTO.fromEntity(report, corpDto,
+            userService.findById2(report.getCreatedBy()),
+            userService.findById2(report.getUpdatedBy()),
+            true);
         }
       })
       .toList();
