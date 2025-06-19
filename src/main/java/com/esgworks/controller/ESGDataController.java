@@ -100,7 +100,6 @@ public ResponseEntity<ESGDataDTO> getESGDataById(@PathVariable String esgDataId)
 
     @PatchMapping("/data-value")
     public ResponseEntity<ESGDataDTO> patchESGData(@RequestBody ESGDataFilterDTO dto) {
-        log.info(dto.toString());
         return ResponseEntity.ok(esgDataService.patchESGData(dto));
     }
     @PostMapping("/data-value")
