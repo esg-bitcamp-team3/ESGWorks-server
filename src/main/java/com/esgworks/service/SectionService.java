@@ -72,13 +72,14 @@ public class SectionService {
         Section section = sectionRepository.findBySectionId(dto.getSectionId())
                 .orElseThrow(() -> new NotFoundException("해당 섹션을 찾을 수 없습니다."));
 
-        // 기존 카테고리 정보를 전달받은 DTO 값으로 수정
-        section.updateSection(dto.getSectionName(), dto.getCriterionId());
-        // 수정된 카테고리를 DB에 저장 (실제로 update 수행)
-        sectionRepository.save(section);
+        if (dto.getSectionName() != null) {
+            section.setSectionName(dto.getSectionName());
+        }
+
+        Section savedSection = sectionRepository.save(section);
 
         // 저장된 카테고리 엔티티를 DTO로 변환해서 리턴
-        return section.toDTO();
+        return savedSection.toDTO();
     }
 
     public void deleteSection(String sectionId) {

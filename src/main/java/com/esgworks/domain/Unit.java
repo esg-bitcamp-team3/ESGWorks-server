@@ -20,12 +20,14 @@ public class Unit {
 
     private String unitName;
     private String type;
+    private String description;
 
     public UnitDTO toDTO() {
         return UnitDTO.builder()
                 .unitId(unitId)
                 .unitName(unitName)
                 .type(type)
+                .description(description)
                 .build();
     }
 }

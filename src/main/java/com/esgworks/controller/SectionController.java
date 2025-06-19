@@ -43,9 +43,9 @@ public class SectionController {
         sectionService.createSection(dto);
         return ResponseEntity.ok(dto);
     }
-    @PutMapping("/{sectionId}")
-    public ResponseEntity<SectionDTO> updateSection(@PathVariable Long sectionId, @RequestBody SectionDTO dto) {
-        dto.setSectionId(String.valueOf(sectionId));  // 경로에서 받은 categoryId를 DTO에 덮어씀
+    @PatchMapping("/{sectionId}")
+    public ResponseEntity<SectionDTO> updateSection(@PathVariable String sectionId, @RequestBody SectionDTO dto) {
+        dto.setSectionId(sectionId);  // 경로에서 받은 categoryId를 DTO에 덮어씀
         SectionDTO updatedDto = sectionService.updateSection(dto);
         return ResponseEntity.ok(updatedDto);  // 진짜 저장된 값 기준으로 응답
     }

@@ -58,9 +58,9 @@ public class CategoryController {
         categoryService.createCategory(dto);
         return ResponseEntity.ok(dto);
     }
-    @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDTO dto) {
-        dto.setCategoryId(String.valueOf(categoryId));  // 경로에서 받은 categoryId를 DTO에 덮어씀
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable String categoryId, @RequestBody CategoryDTO dto) {
+        dto.setCategoryId(categoryId);  // 경로에서 받은 categoryId를 DTO에 덮어씀
         CategoryDTO updatedDto = categoryService.updateCategory(dto);
         return ResponseEntity.ok(updatedDto);  // 진짜 저장된 값 기준으로 응답
     }

@@ -14,4 +14,5 @@ public class UnitDTO {
     private String unitId;
     private String unitName;
     private String type;
+    private String description;
 }
