@@ -16,12 +16,14 @@ public class Unit {
     private String unitId;
     private String unitName;
     private String type;
+    private String description;
 
     public UnitDTO toDTO() {
         return UnitDTO.builder()
                 .unitId(unitId)
                 .unitName(unitName)
                 .type(type)
+                .description(description)
                 .build();
     }
     public void updateUnit(String unitName, String type) {

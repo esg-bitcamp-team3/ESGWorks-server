@@ -2,15 +2,13 @@ package com.esgworks.domain;
 
 
 import com.esgworks.dto.SectionDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "section")
@@ -27,11 +25,6 @@ public class Section {
                 .sectionName(sectionName)
                 .criterionId(criterionId)
                 .build();
-    }
-
-    public void updateSection(String sectionName, String criterionId) {
-        this.sectionName = sectionName;
-        this.criterionId = criterionId;
     }
 
 }
