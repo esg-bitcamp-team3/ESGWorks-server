@@ -9,12 +9,14 @@ import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.CorporationRepository;
 import com.esgworks.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.esgworks.domain.CorporationInfo;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -72,43 +74,46 @@ public class UserService {
 
     // 카테고리 정보를 업데이트하는 메서드
     public UserDTO updateUser(UserDTO dto) {
-        // 현재 로그인한 사용자의 인증 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // 인증 정보가 없거나 로그인 안 된 상태면 예외 발생
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new NotFoundException("로그인하세요");
         }
 
-        // categoryId로 기존 카테고리를 DB에서 찾아오기
         User user = userRepository.findById(dto.getId())
                 .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
 
-        // 기존 카테고리 정보를 전달받은 DTO 값으로 수정
-        user.setPassword(dto.getPassword());      // 이름 수정
-        user.setId(dto.getId());                  // 단위 ID 수정
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
 
-        // 수정된 카테고리를 DB에 저장 (실제로 update 수행)
+        // 다른 수정 가능한 필드만 수정
+        // user.setId(...) ❌ 하지 말 것
+
         User updatedUser = userRepository.save(user);
-
-        // 저장된 카테고리 엔티티를 DTO로 변환해서 리턴
         return updatedUser.toDTO();
     }
 
 
-    public String updatePassword(String id, PasswordUpdateDTO dto){
-        User user = userRepository.findById(id)
+    public String updatePassword(PasswordUpdateDTO dto){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userId = auth.getName();
+        // 인증 정보가 없거나 로그인 안 된 상태면 예외 발생
+        if (!auth.isAuthenticated()) {
+            throw new NotFoundException("로그인하세요");
+        }
+
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
 
         // 기존 비밀번호 검증
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-            return "기존 비밀번호가 일치하지 않습니다";
+            return "기존 비밀번호가 일치하지않습니다.";
         }
 
         // 새 비밀번호 저장
         user.updatePassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
-
+log.info(dto.getNewPassword());
         return "비밀번호 변경 성공";
     }
 
