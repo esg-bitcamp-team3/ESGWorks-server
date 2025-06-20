@@ -1,0 +1,32 @@
+Merge branch 'main' of github.com:esg-bitcamp-team3/ESGWorks-server into search
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Thu Jun 19 16:09:28 2025 +0900
+#
+# On branch search
+# Changes to be committed:
+#	modified:   src/main/java/com/esgworks/controller/ESGDataController.java
+#	modified:   src/main/java/com/esgworks/controller/GriController.java
+#	modified:   src/main/java/com/esgworks/controller/ReportController.java
+#	modified:   src/main/java/com/esgworks/controller/UnitController.java
+#	modified:   src/main/java/com/esgworks/controller/UserController.java
+#	modified:   src/main/java/com/esgworks/domain/Category.java
+#	modified:   src/main/java/com/esgworks/domain/Criterion.java
+#	modified:   src/main/java/com/esgworks/domain/Unit.java
+#	modified:   src/main/java/com/esgworks/domain/User.java
+#	modified:   src/main/java/com/esgworks/dto/CategoryESGDataDTO.java
+#	modified:   src/main/java/com/esgworks/dto/CriterionDTO.java
+#	new file:   src/main/java/com/esgworks/dto/PasswordUpdateDTO.java
+#	modified:   src/main/java/com/esgworks/dto/ReportDTO.java
+#	modified:   src/main/java/com/esgworks/dto/UserDTO.java
+#	modified:   src/main/java/com/esgworks/service/CategoryService.java
+#	modified:   src/main/java/com/esgworks/service/CriterionService.java
+#	modified:   src/main/java/com/esgworks/service/ESGDataService.java
+#	modified:   src/main/java/com/esgworks/service/GriService.java
+#	modified:   src/main/java/com/esgworks/service/ReportService.java
+#	modified:   src/main/java/com/esgworks/service/SectionService.java
+#	modified:   src/main/java/com/esgworks/service/UnitService.java
+#	modified:   src/main/java/com/esgworks/service/UserService.java
+#
