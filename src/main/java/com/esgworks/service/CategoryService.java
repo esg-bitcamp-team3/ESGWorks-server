@@ -44,8 +44,8 @@ public class CategoryService {
     }
 
     // sectionId로 카테고리 목록 조회
-    public List<CategoryDetailDTO> getCategoriesBySectionId(String sectionId, String startsWith) {
-        List<Category> categories = categoryRepository.findAllBySectionIdAndCategoryIdStartingWith(sectionId, startsWith);
+    public List<CategoryDetailDTO> getCategoriesBySectionId(String sectionId) {
+        List<Category> categories = categoryRepository.findAllBySectionId(sectionId);
 
         if (categories.isEmpty()) {
             return new ArrayList<>();
