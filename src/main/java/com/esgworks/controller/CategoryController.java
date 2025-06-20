@@ -32,8 +32,8 @@ public class CategoryController {
 
     // sectionId로 카테고리 리스트 조회
     @GetMapping("/by-section/{sectionId}")
-    public ResponseEntity<List<CategoryDetailDTO>> getCategoriesBySectionId(@PathVariable String sectionId, @RequestParam(value = "starts-with", required = false, defaultValue = "") String startsWith) {
-        List<CategoryDetailDTO> categories = categoryService.getCategoriesBySectionId(sectionId, startsWith);
+    public ResponseEntity<List<CategoryDetailDTO>> getCategoriesBySectionId(@PathVariable String sectionId) {
+        List<CategoryDetailDTO> categories = categoryService.getCategoriesBySectionId(sectionId);
         return ResponseEntity.ok(categories);
     }
 
