@@ -2,9 +2,8 @@ package com.esgworks.service;
 
 import com.esgworks.domain.Corporation;
 import com.esgworks.domain.User;
-import com.esgworks.dto.PasswordUpdateDTO;
-import com.esgworks.dto.UserDTO;
-import com.esgworks.dto.UserSignupRequest;
+import com.esgworks.dto.*;
+import com.esgworks.exceptions.AuthenticationException;
 import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.CorporationRepository;
 import com.esgworks.repository.UserRepository;
@@ -23,6 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CorporationRepository corporationRepository;
+    private final CorporationService corporationService;
 
     public boolean signup(UserSignupRequest req) {
         if (userRepository.existsById(req.getId())) {
@@ -58,8 +58,16 @@ public class UserService {
         return true;
     }
 
+    public UserDetailDTO findDetailsById(String id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AuthenticationException("로그인이 필요합니다"));
+        CorporationDTO corporationDTO = corporationService.getCorporationById(user.getCorpId());
+        return user.toDetailDTO(corporationDTO);
+
+    }
+
     public User findById(String id) {
-        return userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(() -> new AuthenticationException("로그인이 필요합니다"));
+        return user;
     }
     public UserDTO findById2(String id) {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("로그인 실패")).toDTO();

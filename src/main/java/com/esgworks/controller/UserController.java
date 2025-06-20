@@ -51,8 +51,8 @@ public class UserController {
 
 
     @GetMapping("/my")
-    public ResponseEntity<?> getMyInfo(Authentication authentication) {
-        User user = userService.findById(authentication.getName());
+    public ResponseEntity<UserDetailDTO> getMyInfo(Authentication authentication) {
+        UserDetailDTO user = userService.findDetailsById(authentication.getName());
         return ResponseEntity.ok(user);
     }
     @GetMapping("/profile")
