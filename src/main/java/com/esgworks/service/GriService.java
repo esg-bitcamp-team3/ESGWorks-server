@@ -76,7 +76,7 @@ public class GriService {
       .sectionName(section.getSectionName())
       .criterionId(section.getCriterionId())
       .categoryESGDataList(
-        categoryService.getCategoryBySectionId(section.getSectionId(), categoryName).stream()
+        categoryService.getCategoryBySectionIdAndCategoryName2(section.getSectionId(), categoryName).stream()
           .map(category ->
             CategoryESGDataDTO.builder()
               .categoryId(category.getCategoryId())

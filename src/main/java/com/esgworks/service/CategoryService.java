@@ -92,9 +92,14 @@ public class CategoryService {
           .map(Category::toDTO)
           .toList();
     }
+    public List<CategoryDTO> getCategoryBySectionId(String sectionId) {
+        List<Category> categories = categoryRepository.findAllBySectionId(sectionId);
+        return categories.stream()
+          .map(Category::toDTO)
+          .toList();
+    }
 
-
-    public List<CategoryDTO> getCategoryBySectionId(String sectionId, String categoryName) {
+    public List<CategoryDTO> getCategoryBySectionIdAndCategoryName2(String sectionId, String categoryName) {
         List<Category> categories ;
         if(categoryName == null || categoryName.isBlank()) {
             categories = categoryRepository.findAllBySectionId(sectionId);
