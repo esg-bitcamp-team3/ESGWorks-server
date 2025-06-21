@@ -99,17 +99,6 @@ public class CategoryService {
           .toList();
     }
 
-    public List<CategoryDTO> getCategoryBySectionIdAndCategoryName2(String sectionId, String categoryName) {
-        List<Category> categories ;
-        if(categoryName == null || categoryName.isBlank()) {
-            categories = categoryRepository.findAllBySectionId(sectionId);
-        }else{
-            categories = categoryRepository.findAllBySectionIdAndCategoryNameContainingIgnoreCase(sectionId, categoryName);
-        }
-        return categories.stream()
-          .map(Category::toDTO)
-          .toList();
-    }
 
     public List<CategoryDTO> getCategoryBySectionIdAndCategoryName(String sectionId, String categoryName) {
         List<Category> categories  = categoryRepository.findAllBySectionIdAndCategoryNameContainingIgnoreCase(sectionId, categoryName);
