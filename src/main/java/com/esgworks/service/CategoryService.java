@@ -92,14 +92,13 @@ public class CategoryService {
           .map(Category::toDTO)
           .toList();
     }
-
-
     public List<CategoryDTO> getCategoryBySectionId(String sectionId) {
         List<Category> categories = categoryRepository.findAllBySectionId(sectionId);
         return categories.stream()
           .map(Category::toDTO)
           .toList();
     }
+
 
     public List<CategoryDTO> getCategoryBySectionIdAndCategoryName(String sectionId, String categoryName) {
         List<Category> categories  = categoryRepository.findAllBySectionIdAndCategoryNameContainingIgnoreCase(sectionId, categoryName);
