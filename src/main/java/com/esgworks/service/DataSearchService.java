@@ -17,13 +17,10 @@ public class DataSearchService {
   private final ESGDataService esgDataService;
   private final UnitService unitService;
 
-  public SectionCategoryESGDataDTO search(String year, String sectionId, String categoryName) {
+  public SectionCategoryESGDataDTO search(String year, String sectionId) {
     SectionDTO section = sectionService.getSectionById(sectionId);
 
-    List<CategoryDTO> categories = categoryService.getCategoryBySectionIdAndCategoryName(section.getSectionId(), categoryName);
-    if (categories == null || categories.isEmpty()) {
-      return null;
-    }
+    List<CategoryDTO> categories = categoryService.getCategoryBySectionId(section.getSectionId());
 
     return SectionCategoryESGDataDTO.builder()
             .sectionId(section.getSectionId())

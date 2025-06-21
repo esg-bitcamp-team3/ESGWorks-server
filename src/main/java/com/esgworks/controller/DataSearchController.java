@@ -22,8 +22,7 @@ public class DataSearchController {
   @GetMapping("/search")
   public ResponseEntity<SectionCategoryESGDataDTO> getSelectedSectionCategories(
           @RequestParam(required = false, defaultValue = "2020") String year,
-          @RequestParam(required = false) String sectionId,
-          @RequestParam(required = false, defaultValue = "") String categoryName) {
-    return ResponseEntity.ok(dataSearchService.search(year, sectionId, categoryName));
+          @RequestParam(required = false) String sectionId) {
+    return ResponseEntity.ok(dataSearchService.search(year, sectionId));
   }
 }

@@ -1,23 +1,23 @@
-package com.esgworks.bootstrap;
-
-import com.esgworks.domain.Category;
-import com.esgworks.dto.CategoryDTO;
-import com.esgworks.repository.CategoryRepository;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+//package com.esgworks.bootstrap;
+//
+//import com.esgworks.domain.Category;
+//import com.esgworks.dto.CategoryDTO;
+//import com.esgworks.repository.CategoryRepository;
+//import jakarta.annotation.PostConstruct;
+//import lombok.RequiredArgsConstructor;
 //import org.apache.poi.ss.usermodel.*;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-@Component
-@RequiredArgsConstructor
-public class CategoryDataLoader {
-
+//import org.springframework.core.io.ClassPathResource;
+//import org.springframework.stereotype.Component;
+//
+//import java.io.InputStream;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//@Component
+//@RequiredArgsConstructor
+//public class CategoryDataLoader {
+//
 //    private final CategoryRepository categoryRepository;
 //
 //    @PostConstruct
@@ -76,4 +76,4 @@ public class CategoryDataLoader {
 //            default -> null;
 //        };
 //    }
-}
+//}
