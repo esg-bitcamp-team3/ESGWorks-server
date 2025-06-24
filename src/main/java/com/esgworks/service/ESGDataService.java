@@ -172,9 +172,10 @@ public class ESGDataService {
     public ESGDataDTO patchESGData(ESGDataFilterDTO dto) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userId = userDetails.getUsername();
+        UserDTO user = userService.findById2(userId);
 
         ESGData existing = esgDataRepository
-          .findByCorpIdAndYearAndCategoryId(dto.getCorpId(), dto.getYear(), dto.getCategoryId())
+          .findByCorpIdAndYearAndCategoryId(user.getCorpId(), dto.getYear(), dto.getCategoryId())
           .orElseThrow(() -> new NotFoundException("해당 ESG 데이터가 존재하지 않습니다."));
 
         existing.updateValue(dto.getValue(), userId);
@@ -186,17 +187,18 @@ public class ESGDataService {
     public ESGDataDTO createESGData2(ESGDataFilterDTO dto) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userId = userDetails.getUsername();
+        UserDTO user = userService.findById2(userId);
 
         Optional<ESGData> existing = esgDataRepository
-          .findByCorpIdAndYearAndCategoryId(dto.getCorpId(), dto.getYear(), dto.getCategoryId());
-        log.info(dto.toString());
+          .findByCorpIdAndYearAndCategoryId(user.getCorpId(), dto.getYear(), dto.getCategoryId());
+
         if (existing.isPresent()){
             throw new DuplicateException("해당 ESG 데이터가 이미 존재합니다.");
         }
 
         ESGData esgData = ESGData.builder()
           .categoryId(dto.getCategoryId())
-          .corpId(dto.getCorpId())
+          .corpId(user.getCorpId())
           .year(dto.getYear())
           .value(dto.getValue())
           .createdAt(LocalDateTime.now())

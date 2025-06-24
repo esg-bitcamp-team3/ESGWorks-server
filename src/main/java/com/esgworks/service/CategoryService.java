@@ -44,8 +44,8 @@ public class CategoryService {
     }
 
     // sectionId로 카테고리 목록 조회
-    public List<CategoryDetailDTO> getCategoriesBySectionId(String sectionId, String startsWith) {
-        List<Category> categories = categoryRepository.findAllBySectionIdAndCategoryIdStartingWith(sectionId, startsWith);
+    public List<CategoryDetailDTO> getCategoriesBySectionId(String sectionId) {
+        List<Category> categories = categoryRepository.findAllBySectionId(sectionId);
 
         if (categories.isEmpty()) {
             return new ArrayList<>();
@@ -74,30 +74,31 @@ public class CategoryService {
     }
 
     // 이름으로 조회
+//    public List<CategoryDTO> getCategoryByName(String categoryName) {
+//        List<Category> categories ;
+//        if(categoryName == null || categoryName.isBlank()) {
+//            categories = categoryRepository.findAll();
+//        }else{
+//            categories = categoryRepository.findByCategoryNameContainingIgnoreCase(categoryName);
+//        }
+//        return categories.stream()
+//          .map(Category::toDTO)
+//          .toList();
+//    }
     public List<CategoryDTO> getCategoryByName(String categoryName) {
-        List<Category> categories ;
-        if(categoryName == null || categoryName.isBlank()) {
-            categories = categoryRepository.findAll();
-        }else{
-            categories = categoryRepository.findByCategoryNameContainingIgnoreCase(categoryName);
-        }
+        List<Category> categories = categoryRepository.findByCategoryNameContainingIgnoreCase(categoryName);
+
+        return categories.stream()
+          .map(Category::toDTO)
+          .toList();
+    }
+    public List<CategoryDTO> getCategoryBySectionId(String sectionId) {
+        List<Category> categories = categoryRepository.findAllBySectionId(sectionId);
         return categories.stream()
           .map(Category::toDTO)
           .toList();
     }
 
-
-    public List<CategoryDTO> getCategoryBySectionId(String sectionId, String categoryName) {
-        List<Category> categories ;
-        if(categoryName == null || categoryName.isBlank()) {
-            categories = categoryRepository.findAllBySectionId(sectionId);
-        }else{
-            categories = categoryRepository.findAllBySectionIdAndCategoryNameContainingIgnoreCase(sectionId, categoryName);
-        }
-        return categories.stream()
-          .map(Category::toDTO)
-          .toList();
-    }
 
     public List<CategoryDTO> getCategoryBySectionIdAndCategoryName(String sectionId, String categoryName) {
         List<Category> categories  = categoryRepository.findAllBySectionIdAndCategoryNameContainingIgnoreCase(sectionId, categoryName);
@@ -151,10 +152,21 @@ public class CategoryService {
                 .orElseThrow(() -> new NotFoundException("해당 카테고리를 찾을 수 없습니다."));
 
         // 기존 카테고리 정보를 전달받은 DTO 값으로 수정
-        category.setCategoryName(dto.getCategoryName());      // 이름 수정
-        category.setDescription(dto.getDescription());        // 설명 수정
-        category.setSectionId(dto.getSectionId());            // 섹션 ID 수정
-        category.setUnitId(dto.getUnitId());                  // 단위 ID 수정
+        if (dto.getCategoryName() != null) {
+            category.setCategoryName(dto.getCategoryName());  // 이름 수정
+        }
+        if (dto.getDescription() != null) {
+            category.setDescription(dto.getDescription());    // 설명 수정
+        }
+        if (dto.getSectionId() != null) {
+            category.setSectionId(dto.getSectionId());        // 섹션 ID 수정
+        }
+        if (dto.getUnitId() != null) {
+            UnitDTO unitDTO = unitService.getUnitById(dto.getUnitId());
+            category.setUnitId(unitDTO.getUnitId());              // 단위 ID 수정
+        }
+
+
 
         // 수정된 카테고리를 DB에 저장 (실제로 update 수행)
         Category updatedCategory = categoryRepository.save(category);

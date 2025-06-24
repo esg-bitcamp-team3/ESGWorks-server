@@ -71,7 +71,7 @@ public class ReportController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ReportDTO>> search(
+    public ResponseEntity<List<ReportDetailDTO>> search(
             @RequestParam(required = false, defaultValue = "") String keyword,
             @RequestParam(defaultValue = "all", required = false) String filter,
             @AuthenticationPrincipal UserDetails userDetails) {

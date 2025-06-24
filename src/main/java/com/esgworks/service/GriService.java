@@ -1,12 +1,11 @@
 package com.esgworks.service;
 
-import com.esgworks.dto.CategoryESGDataDTO;
-import com.esgworks.dto.SectionCategoryESGDataDTO;
-import com.esgworks.dto.SectionDTO;
+import com.esgworks.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +47,7 @@ public class GriService {
 
   }
 
-  public SectionCategoryESGDataDTO search(String year, String sectionId, String categoryName) {
+  public SectionCategoryESGDataDTO search(String year, String sectionId) {
     SectionDTO section = sectionService.getSectionById(sectionId);
 
     return SectionCategoryESGDataDTO.builder()
@@ -56,12 +55,12 @@ public class GriService {
             .sectionName(section.getSectionName())
             .criterionId(section.getCriterionId())
             .categoryESGDataList(
-                    categoryService.getCategoryBySectionIdAndCategoryName(section.getSectionId(), categoryName).stream()
+                    categoryService.getCategoriesBySectionId(section.getSectionId()).stream()
                             .map(category ->
                                     CategoryESGDataDTO.builder()
                                             .categoryId(category.getCategoryId())
-                                            .sectionId(category.getSectionId())
-                                            .unit(unitService.getUnitById( category.getUnitId()))
+                                            .sectionId(category.getSection().getSectionId())
+                                            .unit(category.getUnit())
                                             .categoryName(category.getCategoryName())
                                             .description(category.getDescription())
                                             .esgData(esgDataService.getByCorpIdAndYearAndCategoryId(year, category.getCategoryId()))
@@ -77,7 +76,7 @@ public class GriService {
       .sectionName(section.getSectionName())
       .criterionId(section.getCriterionId())
       .categoryESGDataList(
-        categoryService.getCategoryBySectionId(section.getSectionId(), categoryName).stream()
+        categoryService.getCategoryBySectionId(section.getSectionId()).stream()
           .map(category ->
             CategoryESGDataDTO.builder()
               .categoryId(category.getCategoryId())
@@ -89,6 +88,12 @@ public class GriService {
               .build()
           ).toList())
       .build();
+  }
+
+  public List<SectionCategoryESGDataDTO> searchingCategoryName(String year, String categoryName) {
+    List<String> sectionIdList = categoryService.getCategoryByName(categoryName).stream().map(CategoryDTO::getSectionId).distinct().toList();
+
+    return sectionIdList.stream().map(sectionId -> search(year, sectionId)).toList();
   }
 
 }

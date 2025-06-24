@@ -51,8 +51,8 @@ public class UserController {
 
 
     @GetMapping("/my")
-    public ResponseEntity<?> getMyInfo(Authentication authentication) {
-        User user = userService.findById(authentication.getName());
+    public ResponseEntity<UserDetailDTO> getMyInfo(Authentication authentication) {
+        UserDetailDTO user = userService.findDetailsById(authentication.getName());
         return ResponseEntity.ok(user);
     }
     @GetMapping("/profile")
@@ -69,9 +69,7 @@ public class UserController {
         return ResponseEntity.ok(updatedDto);
     }
     @PatchMapping("/password")
-    public ResponseEntity<String> updatePassword(@AuthenticationPrincipal Authentication authentication,
-                                            @RequestBody PasswordUpdateDTO dto) {
-
-        return ResponseEntity.ok(userService.updatePassword(authentication.getName(), dto));
+    public ResponseEntity<String> updatePassword(@RequestBody PasswordUpdateDTO dto) {
+        return ResponseEntity.ok(userService.updatePassword(dto));
     }
 }
