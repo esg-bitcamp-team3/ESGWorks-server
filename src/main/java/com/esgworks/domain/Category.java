@@ -1,9 +1,6 @@
 package com.esgworks.domain;
 
-import com.esgworks.dto.CategoryDTO;
-import com.esgworks.dto.CategoryDetailDTO;
-import com.esgworks.dto.SectionDTO;
-import com.esgworks.dto.UnitDTO;
+import com.esgworks.dto.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

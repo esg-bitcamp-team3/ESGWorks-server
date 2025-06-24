@@ -22,5 +22,5 @@ public class DataSetDTO {
     private String backgroundColor;
     private String borderColor;
     private String borderWidth;
-    private String fill;
+    private Boolean fill;
 }

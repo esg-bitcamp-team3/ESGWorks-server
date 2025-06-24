@@ -2,6 +2,7 @@ package com.esgworks.service;
 
 import com.esgworks.domain.Chart;
 import com.esgworks.domain.Criterion;
+import com.esgworks.domain.User;
 import com.esgworks.dto.ChartDTO;
 import com.esgworks.dto.ChartDetailDTO;
 import com.esgworks.dto.DataSetDetailDTO;
@@ -89,9 +90,10 @@ public class ChartService {
 
     // 차트 생성
     public ChartDTO createChart(ChartDTO dto, String userId) {
+        User user = userService.findById(userId);
         // 중복 체크
         chartRepository
-                .findByCorporationIdAndChartName(dto.getCorporationId(), dto.getChartName())
+                .findByCorporationIdAndChartName(user.getCorpId(), dto.getChartName())
                 .ifPresent(existing -> {
                     throw new IllegalArgumentException("이미 동일한 이름의 차트가 존재합니다.");
                 });
@@ -100,7 +102,7 @@ public class ChartService {
 
         Chart chart = Chart.builder()
                 .chartId(dto.getChartId())
-                .corporationId(dto.getCorporationId())
+                .corporationId(user.getCorpId())
                 .chartName(dto.getChartName())
                 .options(dto.getOptions())
                 .createdAt(LocalDate.from(now))

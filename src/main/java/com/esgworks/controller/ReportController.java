@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -76,5 +77,10 @@ public class ReportController {
             @AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails != null ? userDetails.getUsername() : null;
         return ResponseEntity.ok(reportService.searchReports(keyword, filter, userId));
+    }
+
+    @GetMapping("/txt")
+    public ResponseEntity<String> templete() throws IOException {
+        return ResponseEntity.ok(reportService.generateReportTemplete("2024"));
     }
 }
