@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Builder
@@ -19,8 +20,13 @@ public class DataSetDTO {
     private String type;
     private String label;
     private List<String> esgDataIdList;
-    private String backgroundColor;
-    private String borderColor;
-    private String borderWidth;
-    private String fill;
+    private Map<String, Object> chartProperties;
+
+    public void setChartProperty(String key, Object value) {
+        this.chartProperties.put(key, value);
+    }
+
+    public Object getChartProperty(String key) {
+        return this.chartProperties.get(key);
+    }
 }

@@ -132,12 +132,7 @@ public class ESGDataService {
                         throw new IllegalArgumentException("value가 숫자가 아닙니다: " + rawValue);
                     }
 
-                    return ESGNumberDTO.builder()
-                            .categoryId(categoryId)
-                            .corpId(corpId)
-                            .year(esg.getYear())
-                            .value(parsedValue)
-                            .build();
+                    return esg.toNumberDTO(parsedValue);
                 })
                 .toList();
 

@@ -1,7 +1,6 @@
 package com.esgworks.repository;
 
 import com.esgworks.domain.Chart;
-import com.esgworks.domain.ESGData;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,7 @@ public interface ChartRepository extends MongoRepository<Chart, String> {
     Optional<Chart> findByChartId(String chartId);
 
     // 특정 기업의 ESG 데이터를 더미로 조회
-    List<Chart> findAllByCorporationId(String corporationId);
+    List<Chart> findAllByCorporationIdOrderByCreatedAtDesc(String corporationId);
 
     Optional<Chart> findByCorporationIdAndChartName(String corporationId, String chartName);
 

@@ -1,21 +1,21 @@
 package com.esgworks.service;
 
 import com.esgworks.domain.Chart;
-import com.esgworks.domain.Criterion;
 import com.esgworks.dto.ChartDTO;
 import com.esgworks.dto.ChartDetailDTO;
 import com.esgworks.dto.DataSetDetailDTO;
+import com.esgworks.dto.UserDTO;
 import com.esgworks.exceptions.NotFoundException;
 import com.esgworks.repository.ChartRepository;
-import com.esgworks.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChartService {
@@ -40,7 +40,7 @@ public class ChartService {
 
     // corporation ID로 조회
     public List<ChartDetailDTO> getChartsByCorporationId(String corporationId) {
-        List<Chart> charts = chartRepository.findAllByCorporationId(corporationId);
+        List<Chart> charts = chartRepository.findAllByCorporationIdOrderByCreatedAtDesc(corporationId);
 
         return charts.stream().map(
                 chart -> {
@@ -53,7 +53,7 @@ public class ChartService {
     // 유저 ID로 차트 조회
     public List<ChartDetailDTO> getMyCharts(String userId) {
         String corporationId = userService.findById(userId).getCorpId();
-        List<Chart> charts = chartRepository.findAllByCorporationId(corporationId);
+        List<Chart> charts = chartRepository.findAllByCorporationIdOrderByCreatedAtDesc(corporationId);
 
         return charts.stream().map(
                 chart -> {
@@ -66,7 +66,7 @@ public class ChartService {
     // 유저 ID & 차트 TYPE별로 차트 조회
     public List<ChartDetailDTO> getMyChartsByUserIdAndType(String userId, String type) {
         String corporationId = userService.findById(userId).getCorpId();
-        List<Chart> charts = chartRepository.findAllByCorporationId(corporationId);
+        List<Chart> charts = chartRepository.findAllByCorporationIdOrderByCreatedAtDesc(corporationId);
 
         return charts.stream()
                 .filter(chart -> !dataSetService.getDetailedDataSetsByChartIdAndType(chart.getChartId(), type).isEmpty())
@@ -89,7 +89,9 @@ public class ChartService {
 
     // 차트 생성
     public ChartDTO createChart(ChartDTO dto, String userId) {
-        // 중복 체크
+        UserDTO user = userService.findById2(userId);
+        dto.setCorporationId(user.getCorpId());
+        log.info(dto.toString());
         chartRepository
                 .findByCorporationIdAndChartName(dto.getCorporationId(), dto.getChartName())
                 .ifPresent(existing -> {
@@ -98,16 +100,7 @@ public class ChartService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        Chart chart = Chart.builder()
-                .chartId(dto.getChartId())
-                .corporationId(dto.getCorporationId())
-                .chartName(dto.getChartName())
-                .options(dto.getOptions())
-                .createdAt(LocalDate.from(now))
-                .createdBy(userId)
-                .updatedAt(LocalDate.from(now))
-                .updatedBy(userId)
-                .build();
+        Chart chart = Chart.fromDTO(dto);
 
         chartRepository.save(chart);
         return chart.toDTO();

@@ -15,6 +15,4 @@ public interface DataSetRepository extends MongoRepository<DataSet, String> {
 
     // 특정 차트(chartId)에 연결된 데이터셋 전부 조회
     List<DataSet> findAllByChartId(String chartId);
-
-    List<DataSet> findAllByChartIdAndType(String chartId, String type);
 }
