@@ -30,7 +30,7 @@ public class DataSet {
     private String backgroundColor;
     private String borderColor;
     private String borderWidth;
-    private String fill;
+    private Boolean fill;
 
     public DataSetDTO toDTO() {
         return DataSetDTO.builder()

@@ -2,6 +2,8 @@ package com.esgworks.domain;
 
 
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.ESGDataDetailDTO;
+import com.esgworks.dto.UnitDTO;
 import lombok.*;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
@@ -41,6 +43,22 @@ public class ESGData {
                 .createdBy(createdBy)
                 .build();
     }
+
+    public ESGDataDetailDTO toDetailDTO(UnitDTO unit) {
+        return ESGDataDetailDTO.builder()
+                .esgDataId(esgDataId)
+                .categoryId(categoryId)
+                .corpId(corpId)
+                .year(year)
+                .value(value)
+                .unit(unit)
+                .updatedAt(updatedAt)
+                .updatedBy(updatedBy)
+                .createdAt(createdAt)
+                .createdBy(createdBy)
+                .build();
+    }
+
     public void updateValue(String value, String updatedBy) {
         this.value = value;
         this.updatedAt = LocalDateTime.now();

@@ -11,6 +11,7 @@ import com.esgworks.repository.InterestReportsRepository;
 import com.esgworks.repository.ReportRepository;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -18,8 +19,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.Objects;
 import java.util.Set;
 
@@ -31,9 +39,10 @@ public class ReportService {
     private final CorporationService corporationService;
     private final InterestReportsService interestReportsService;
     private final UserService userService;
-  private final InterestReportsRepository interestReportsRepository;
+    private final InterestReportsRepository interestReportsRepository;
+    private final ESGDataService esgDataService;
 
-  public Report createReport(ReportRequest dto,String userId) {
+    public Report createReport(ReportRequest dto,String userId) {
         Report report = Report.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
@@ -48,6 +57,8 @@ public class ReportService {
     }
 
     public ReportDTO createReportAndReturnDTO(ReportRequest dto, String userId) {
+        UserDTO user = userService.findById2(userId);
+        dto.setCorpId(user.getCorpId());
         Report report = createReport(dto, userId);
         CorporationDTO corp = corporationService.getCorporationById(report.getCorpId());
         InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());
@@ -201,10 +212,58 @@ public class ReportService {
           })
           .toList();
       } else {
-        List<Report> reports = reportRepository.search(keyword, filter, userId);
-        return getReportDetailDTOS(reports);
+          List<Report> reports = reportRepository.search(keyword, filter, userId);
+          return getReportDetailDTOS(reports);
       }
     }
+
+    public String generateReportTemplete(String year) throws IOException {
+        // 템플릿 불러오기
+        ClassPathResource resource = new ClassPathResource("templete/templete.txt");
+        String templete = Files.readString(resource.getFile().toPath(), StandardCharsets.UTF_8);
+
+        // {3050101} 같은 7자리 숫자 패턴 찾기
+        Pattern pattern = Pattern.compile("\\{(\\d{7})\\}");
+        Matcher matcher = pattern.matcher(templete);
+
+        Set<String> categoryIds = new HashSet<>();
+        while (matcher.find()) {
+            categoryIds.add(matcher.group(1));
+        }
+
+        // 카테고리별 데이터 치환
+        for (String categoryId : categoryIds) {
+            ESGDataDetailDTO dto;
+            try {
+                dto = esgDataService.getDetailByCorpIdAndYearAndCategoryId(year, categoryId);
+            } catch (Exception e) {
+                // 예외 발생 시 로그 출력 후 기본값 처리
+                System.err.println("Error fetching ESG data for categoryId=" + categoryId + ": " + e.getMessage());
+                dto = null;
+            }
+
+            String valueWithUnit = "-";
+            if (dto != null && dto.getValue() != null) {
+                valueWithUnit = dto.getValue();
+                try {
+                    // unit이 null일 수 있으므로 방어적으로 처리
+                    String unitName = (dto.getUnit() != null && dto.getUnit().getUnitName() != null)
+                            ? dto.getUnit().getUnitName()
+                            : null;
+                    if (unitName != null && !unitName.isBlank()) {
+                        valueWithUnit += " " + unitName;
+                    }
+                } catch (Exception e) {
+                    // 예외가 발생해도 단위 없이 value만 출력
+                    System.err.println("Unit 처리 오류: categoryId=" + categoryId + ", message=" + e.getMessage());
+                }
+            }
+
+            templete = templete.replace("{" + categoryId + "}", valueWithUnit);
+        }
+
+        return templete;
+        }
 
   private List<ReportDTO> getReportDTOS(List<Report> reports) {
     return reports.stream()
