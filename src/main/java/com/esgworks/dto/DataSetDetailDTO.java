@@ -19,12 +19,5 @@ public class DataSetDetailDTO {
     private String type;
     private String label;
     private List<ESGDataDTO> esgDataList;
-<<<<<<< HEAD
     private Map<String, Object> chartProperties;
-=======
-    private String backgroundColor;
-    private String borderColor;
-    private String borderWidth;
-    private Boolean fill;
->>>>>>> 510dfc115441f8392888bf851441d7869127fdbb
 }

@@ -131,17 +131,8 @@ public class ESGDataService {
                         throw new IllegalArgumentException("value가 숫자가 아닙니다: " + rawValue);
                     }
 
-<<<<<<< HEAD
                     return esg.toNumberDTO(parsedValue);
-=======
-                    return ESGNumberDTO.builder()
-                            .categoryId(categoryId)
-                            .corpId(corpId)
-                            .esgDataId(esgDataId)
-                            .year(esg.getYear())
-                            .value(parsedValue)
-                            .build();
->>>>>>> 510dfc115441f8392888bf851441d7869127fdbb
+
                 })
                 .toList();
 

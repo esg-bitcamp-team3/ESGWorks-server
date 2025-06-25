@@ -57,13 +57,8 @@ public class ReportService {
     }
 
     public ReportDTO createReportAndReturnDTO(ReportRequest dto, String userId) {
-<<<<<<< HEAD
       UserDTO user = userService.findById2(userId);
       dto.setCorpId(user.getCorpId());
-=======
-        UserDTO user = userService.findById2(userId);
-        dto.setCorpId(user.getCorpId());
->>>>>>> 510dfc115441f8392888bf851441d7869127fdbb
         Report report = createReport(dto, userId);
         CorporationDTO corp = corporationService.getCorporationById(report.getCorpId());
         InterestReportsDTO interestReportsDTO = interestReportsService.getInterestReportByUserId(report.getId());

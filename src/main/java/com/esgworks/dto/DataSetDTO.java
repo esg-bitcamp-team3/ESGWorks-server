@@ -20,7 +20,6 @@ public class DataSetDTO {
     private String type;
     private String label;
     private List<String> esgDataIdList;
-<<<<<<< HEAD
     private Map<String, Object> chartProperties;
 
     public void setChartProperty(String key, Object value) {
@@ -30,10 +29,4 @@ public class DataSetDTO {
     public Object getChartProperty(String key) {
         return this.chartProperties.get(key);
     }
-=======
-    private String backgroundColor;
-    private String borderColor;
-    private String borderWidth;
-    private Boolean fill;
->>>>>>> 510dfc115441f8392888bf851441d7869127fdbb
 }
