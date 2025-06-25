@@ -14,10 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 public class ChartDetailDTO {
     private String chartId;
+    private String type;
     private String corporationId;
     private String chartName;
     private List<DataSetDetailDTO> dataSets;
     private String options;
+    private String formatOptions;
+    private List<String> labels;
     private LocalDate updatedAt;
     private String updatedBy;
     private LocalDate createdAt;

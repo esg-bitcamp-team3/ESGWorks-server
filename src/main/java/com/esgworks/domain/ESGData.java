@@ -2,6 +2,8 @@ package com.esgworks.domain;
 
 
 import com.esgworks.dto.ESGDataDTO;
+import com.esgworks.dto.ESGNumberDTO;
+
 import com.esgworks.dto.ESGDataDetailDTO;
 import com.esgworks.dto.UnitDTO;
 import lombok.*;
@@ -44,6 +46,16 @@ public class ESGData {
                 .build();
     }
 
+
+    public ESGNumberDTO toNumberDTO(Double value) {
+        return ESGNumberDTO.builder()
+                .esgDataId(esgDataId)
+                .categoryId(categoryId)
+                .corpId(corpId)
+                .year(year)
+                .value(value)
+                .build();
+    }
     public ESGDataDetailDTO toDetailDTO(UnitDTO unit) {
         return ESGDataDetailDTO.builder()
                 .esgDataId(esgDataId)

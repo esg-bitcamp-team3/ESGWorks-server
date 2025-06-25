@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -24,39 +26,32 @@ public class DataSet {
     private String dataSetId;
 
     private String chartId;
-    private String type;
-    private String label;
     private List<String> esgDataIdList;
-    private String backgroundColor;
-    private String borderColor;
-    private String borderWidth;
-    private Boolean fill;
+
+    private Map<String, Object> chartProperties;
+
 
     public DataSetDTO toDTO() {
         return DataSetDTO.builder()
                 .dataSetId(dataSetId)
                 .chartId(chartId)
-                .type(type)
-                .label(label)
-                .esgDataIdList(esgDataIdList)
-                .backgroundColor(backgroundColor)
-                .borderColor(borderColor)
-                .borderWidth(borderWidth)
-                .fill(fill)
+                .chartProperties(chartProperties)
                 .build();
     }
 
-    public DataSetDetailDTO toDetailDTO(List<ESGDataDTO> esgDataList) {
+    public DataSetDetailDTO toDetailDTO(List<ESGDataDTO> esgDataDTOList) {
         return DataSetDetailDTO.builder()
                 .dataSetId(dataSetId)
-                .chartId(chartId)
-                .type(type)
-                .label(label)
-                .esgDataList(esgDataList)
-                .backgroundColor(backgroundColor)
-                .borderColor(borderColor)
-                .borderWidth(borderWidth)
-                .fill(fill)
+                .esgDataList(esgDataDTOList)
+                .chartProperties(chartProperties)
+                .build();
+    }
+    public static DataSet fromDTO(DataSetDTO dto) {
+        return DataSet.builder()
+                .dataSetId(dto.getDataSetId())
+                .chartId(dto.getChartId())
+                .esgDataIdList(dto.getEsgDataIdList())
+                .chartProperties(dto.getChartProperties())
                 .build();
     }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Builder
@@ -18,8 +19,5 @@ public class DataSetDetailDTO {
     private String type;
     private String label;
     private List<ESGDataDTO> esgDataList;
-    private String backgroundColor;
-    private String borderColor;
-    private String borderWidth;
-    private Boolean fill;
+    private Map<String, Object> chartProperties;
 }

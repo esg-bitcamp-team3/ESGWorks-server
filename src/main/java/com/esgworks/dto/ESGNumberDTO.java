@@ -9,9 +9,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ESGNumberDTO {
+    private String esgDataId;
     private String categoryId;
     private String corpId;
-    private String esgDataId;
     private String year;
     private Double value;
 }

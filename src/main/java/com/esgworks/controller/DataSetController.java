@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/datasets")
@@ -31,8 +32,8 @@ public class DataSetController {
     }
 
     @PostMapping
-    public ResponseEntity<DataSetDTO> create(@RequestBody DataSetDTO dto) {
-        return ResponseEntity.ok(dataSetService.createDataSet(dto));
+    public ResponseEntity<DataSetDTO> create(@RequestBody Map<String, Object> data) {
+        return ResponseEntity.ok(dataSetService.createDataSet(data));
     }
 
     @PutMapping("/{dataSetId}")
