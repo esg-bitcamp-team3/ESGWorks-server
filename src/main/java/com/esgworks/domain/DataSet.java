@@ -27,9 +27,16 @@ public class DataSet {
 
     private String chartId;
     private List<String> esgDataIdList;
+<<<<<<< HEAD
     private Map<String, Object> chartProperties;
 
 
+=======
+    private String backgroundColor;
+    private String borderColor;
+    private String borderWidth;
+    private Boolean fill;
+>>>>>>> 510dfc115441f8392888bf851441d7869127fdbb
 
     public DataSetDTO toDTO() {
         return DataSetDTO.builder()

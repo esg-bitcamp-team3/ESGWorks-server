@@ -58,10 +58,18 @@ public class ChartController {
 
 
     @PostMapping
-    public ResponseEntity<ChartDTO> createChart(@RequestBody ChartDTO dto, Authentication authentication) {
+    public ResponseEntity<?> createChart(@RequestBody ChartDTO dto, Authentication authentication) {
         String userId = authentication.getName();
             ChartDTO created = chartService.createChart(dto, userId);
             return ResponseEntity.ok(created);
+<<<<<<< HEAD
+=======
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+>>>>>>> 510dfc115441f8392888bf851441d7869127fdbb
     }
 
     @PutMapping("/{chartId}")

@@ -3,11 +3,7 @@ package com.esgworks.service;
 import com.esgworks.domain.Criterion;
 import com.esgworks.domain.ESGData;
 import com.esgworks.domain.User;
-import com.esgworks.dto.CategorizedESGDataListDTO;
-import com.esgworks.dto.CategoryDetailDTO;
-import com.esgworks.dto.ESGDataDTO;
-import com.esgworks.dto.UserDTO;
-import com.esgworks.dto.ESGNumberDTO;
+import com.esgworks.dto.*;
 import com.esgworks.dto.dataDTO.ESGDataFilterDTO;
 import com.esgworks.exceptions.DuplicateException;
 import com.esgworks.exceptions.InvalidRequestException;
@@ -35,6 +31,7 @@ public class ESGDataService {
     private final ESGDataRepository esgDataRepository;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final UnitService unitService;
 
     public ESGDataDTO getESGDataById(String esgDataId) {
         ESGData esgData = esgDataRepository.findByEsgDataId(esgDataId).orElseThrow(() -> new RuntimeException("없는 ESG데이터입니다."));
@@ -125,6 +122,8 @@ public class ESGDataService {
                 .map(esg -> {
                     String rawValue = esg.getValue();
                     double parsedValue;
+                    String esgDataId = esg.getEsgDataId();
+
 
                     try {
                         parsedValue = Double.parseDouble(rawValue);
@@ -132,7 +131,17 @@ public class ESGDataService {
                         throw new IllegalArgumentException("value가 숫자가 아닙니다: " + rawValue);
                     }
 
+<<<<<<< HEAD
                     return esg.toNumberDTO(parsedValue);
+=======
+                    return ESGNumberDTO.builder()
+                            .categoryId(categoryId)
+                            .corpId(corpId)
+                            .esgDataId(esgDataId)
+                            .year(esg.getYear())
+                            .value(parsedValue)
+                            .build();
+>>>>>>> 510dfc115441f8392888bf851441d7869127fdbb
                 })
                 .toList();
 
@@ -151,6 +160,16 @@ public class ESGDataService {
         Optional<ESGData> data = esgDataRepository
           .findByCorpIdAndYearAndCategoryId(user.getCorpId(), year, categoryId);
       return data.map(ESGData::toDTO).orElse(null);
+    }
+
+    public ESGDataDetailDTO getDetailByCorpIdAndYearAndCategoryId(String year , String categoryId)  {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDTO user = userService.findById2(authentication.getName());
+        UnitDTO unit = unitService.getUnitById(categoryId);
+
+        Optional<ESGData> data = esgDataRepository
+                .findByCorpIdAndYearAndCategoryId(user.getCorpId(), year, categoryId);
+        return data.map(esgData -> esgData.toDetailDTO(unit)).orElse(null);
     }
 
     @Transactional
