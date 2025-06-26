@@ -22,6 +22,11 @@ public class InterestReportsController {
         List<InterestReportsDTO> list = interestReportsService.getInterestReportsByUserId();
         return ResponseEntity.ok(list);
     }
+    @GetMapping("/{reportId}")
+    public ResponseEntity<Boolean> getInterestReport(@PathVariable String reportId) {
+        InterestReportsDTO dto = interestReportsService.getInterestReportByUserId(reportId);
+        return ResponseEntity.ok(dto != null);
+    }
 
     //보고서 즐겨찾기 추가
     @PostMapping("/{reportId}")
