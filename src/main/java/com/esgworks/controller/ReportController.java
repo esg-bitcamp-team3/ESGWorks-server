@@ -3,6 +3,7 @@ package com.esgworks.controller;
 import com.esgworks.dto.ReportDTO;
 import com.esgworks.dto.ReportDetailDTO;
 import com.esgworks.dto.ReportRequest;
+import com.esgworks.dto.TemplateDTO;
 import com.esgworks.service.CorporationService;
 import com.esgworks.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -79,8 +80,8 @@ public class ReportController {
         return ResponseEntity.ok(reportService.searchReports(keyword, filter, userId));
     }
 
-    @GetMapping("/txt")
-    public ResponseEntity<String> templete() throws IOException {
-        return ResponseEntity.ok(reportService.generateReportTemplete("2024"));
+    @GetMapping("/template")
+    public ResponseEntity<TemplateDTO> getTemplate() throws IOException {
+        return ResponseEntity.ok(reportService.getTemplate());
     }
 }
