@@ -81,7 +81,7 @@ public class ReportController {
     }
 
     @GetMapping("/template")
-    public ResponseEntity<TemplateDTO> getTemplate() throws IOException {
+    public ResponseEntity<TemplateDTO> getTemplate() {
         return ResponseEntity.ok(reportService.getTemplate());
     }
 }

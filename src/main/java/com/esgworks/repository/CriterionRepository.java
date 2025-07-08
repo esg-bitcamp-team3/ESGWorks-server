@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CriterionRepository extends MongoRepository<Criterion, String> {
     Optional<Criterion> findByCriterionId(String criterionId);
-    @Query("{ '$or': [ { 'corporationId': ?0 }, { 'corporationId': null } ] }")
-    List<Criterion> findByCorporationIdIncludingNull(String corporationId);
+    List<Criterion> findByCorporationId(String corporationId);
+    List<Criterion> findByCriterionIdIn(List<String> criterionIds);
 }

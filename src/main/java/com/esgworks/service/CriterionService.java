@@ -39,7 +39,12 @@ public class CriterionService {
 
     public List<CriterionDTO> getMyCriteria(String userId) {
         UserDTO user = userService.findById2(userId);
-        List<Criterion> criteria = criterionRepository.findByCorporationIdIncludingNull(user.getCorpId());
+        List<Criterion> criteria = criterionRepository.findByCorporationId(user.getCorpId());
+        return criteria.stream().map(Criterion::toDTO).collect(Collectors.toList());
+    }
+
+    public List<CriterionDTO> getESGCriteria() {
+        List<Criterion> criteria = criterionRepository.findByCriterionIdIn(List.of(new String[]{"cri-01", "cri-02", "cri-03"}));
         return criteria.stream().map(Criterion::toDTO).collect(Collectors.toList());
     }
 

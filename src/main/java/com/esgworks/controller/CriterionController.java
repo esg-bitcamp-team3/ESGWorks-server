@@ -33,6 +33,11 @@ public class CriterionController {
         return ResponseEntity.ok(criterionService.getMyCriteria(userDetails.getUsername()));
     }
 
+    @GetMapping("/disclosure")
+    public ResponseEntity<List<CriterionDTO>> getDisclosureCriteria() {
+        return ResponseEntity.ok(criterionService.getESGCriteria());
+    }
+
     // 기준 ID로 단일 조회
     @GetMapping("/{criterionId}")
     public ResponseEntity<CriterionDTO> getCriterionById(@PathVariable String criterionId) {

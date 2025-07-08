@@ -290,6 +290,7 @@ public class ReportService {
         filledTemplate.setTemplateId(template.getTemplateId());
         filledTemplate.setTitle(template.getTitle());
         filledTemplate.setContent(content);
+        log.info(filledTemplate.toString());
 
         return filledTemplate;
     }
