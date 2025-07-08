@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -21,9 +22,9 @@ public class ChartDTO {
     private String options;
     private String formatOptions;
     private List<String> labels;
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
     private String updatedBy;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private String createdBy;
 }
 

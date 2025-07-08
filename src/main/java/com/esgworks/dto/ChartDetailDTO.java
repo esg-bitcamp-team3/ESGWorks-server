@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -21,8 +22,8 @@ public class ChartDetailDTO {
     private String options;
     private String formatOptions;
     private List<String> labels;
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
     private String updatedBy;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private String createdBy;
 }

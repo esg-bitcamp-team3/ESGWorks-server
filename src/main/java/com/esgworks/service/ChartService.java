@@ -101,7 +101,9 @@ public class ChartService {
                 });
 
         LocalDateTime now = LocalDateTime.now();
-
+        dto.setCreatedAt(now);
+        dto.setUpdatedAt(now);
+        dto.setCreatedBy(userId);
 
         Chart chart = Chart.fromDTO(dto);
 
@@ -113,7 +115,6 @@ public class ChartService {
     public ChartDTO updateChart(String chartId, ChartDTO dto, String userId) {
         Chart existing = chartRepository.findByChartId(chartId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 차트가 존재하지 않습니다."));
-        LocalDateTime now = LocalDateTime.now();
 
         Chart updated = Chart.builder()
                 .chartId(existing.getChartId())
@@ -122,7 +123,7 @@ public class ChartService {
                 .options(dto.getOptions())
                 .createdAt(existing.getCreatedAt())
                 .createdBy(existing.getCreatedBy())
-                .updatedAt(LocalDate.from(now))
+                .updatedAt(LocalDateTime.now())
                 .updatedBy(userId)
                 .build();
 

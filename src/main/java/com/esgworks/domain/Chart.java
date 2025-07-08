@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,9 @@ public class Chart {
     private String options;
     private String formatOptions;
     private List<String> labels;
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
     private String updatedBy;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private String createdBy;
 
     public ChartDTO toDTO() {
